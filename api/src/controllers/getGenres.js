@@ -10,28 +10,33 @@ const getGenres = async (req, res) => {
     if (genresInDatabase.length === 0) {
       const apiUrl = `https://api.rawg.io/api/genres?key=${API_KEY}`;
       const response = await axios.get(apiUrl);
-      const apiGenres = response.data.results; //aca tengo que poner que solo me traiga los generos. Me esta trayendo una array con objetos donde tiene la propiedad name que es la que me interesa
+      const apiGenres = response.data.results;
 
       if (!apiGenres) {
         // Si la respuesta de la API no contiene géneros, devuelve un error
         return res.status(500).json({ error: 'Error al obtener los géneros.' });
       }
 
-      // Itera sobre los géneros de la API y guárdalos en la base de datos
-      for (const genre of apiGenres) {
+      // Obtén solo los nombres de los géneros de la API
+      const genreNames = apiGenres.map((genre) => genre.name);
+
+      // Itera sobre los nombres de géneros y guárdalos en la base de datos
+      for (const name of genreNames) {
         await Gender.create({
-          name: genre.name,
+          name,
         });
       }
 
       // Obtén nuevamente los géneros de la base de datos
-      const genresFromDatabase = await Gender.findAll();
+      const genresFromDatabase = await Gender.findAll({
+        attributes: ['name'], // Obtén solo el nombre de los géneros
+      });
 
-      // Devuelve la lista de géneros en la respuesta HTTP
-      res.status(200).json(genresFromDatabase);
+      // Devuelve la lista de nombres de géneros en la respuesta HTTP
+      res.status(200).json(genresFromDatabase.map((genre) => genre.name));
     } else {
-      // Si la base de datos ya tiene géneros, devuelve la lista de géneros en la respuesta HTTP
-      res.status(200).json(genresInDatabase);
+      // Si la base de datos ya tiene géneros, devuelve la lista de nombres de géneros en la respuesta HTTP
+      res.status(200).json(genresInDatabase.map((genre) => genre.name));
     }
   } catch (error) {
     console.error(error);
