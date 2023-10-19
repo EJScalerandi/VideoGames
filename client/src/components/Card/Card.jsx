@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Card({ game }) {
   if (!game) {
@@ -7,7 +8,11 @@ function Card({ game }) {
 
   return (
     <div>
-      <h3>{game.name}</h3>
+      <Link to={`/game/${game.id}`}>
+        <img src={game.background_image} alt={game.name} />
+        <h3>{game.name}</h3>
+        <p>Género: {game.genres.map((genre) => genre.name).join(', ')}</p>
+      </Link>
       {/* Agrega el resto de los detalles aquí */}
     </div>
   );
