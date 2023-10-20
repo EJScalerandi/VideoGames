@@ -24,6 +24,12 @@ function Detail({ match }) {
   return (
     <div>
       <h1>{gameDetails.name}</h1>
+      <p>Descripcion: {gameDetails.description}</p>
+      <h3>Plataforma: {gameDetails.platform}</h3>
+      <img src={gameDetails.image} alt={gameDetails.name} />
+      <h3>Fecha de lanzamiento: {gameDetails.releaseDate}</h3>
+      <h3>Rating: {gameDetails.rating}</h3>
+      <p>Género: {gameDetails.gender.map((genre) => genre.name).join(', ')}</p>
       {/* Agrega el resto de los detalles del juego aquí */}
     </div>
   );

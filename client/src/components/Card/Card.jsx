@@ -8,11 +8,11 @@ function Card({ game }) {
 
   return (
     <div>
-      <Link to={`/game/${game.id}`}>
         <img src={game.background_image} alt={game.name} />
+      <Link to={`/game/${game.id}`}>
         <h3>{game.name}</h3>
-        <p>Género: {game.genres.map((genre) => genre.name).join(', ')}</p>
       </Link>
+        <p>Género: {game.genres.map((genre) => genre.name).join(', ')}</p>
       {/* Agrega el resto de los detalles aquí */}
     </div>
   );
