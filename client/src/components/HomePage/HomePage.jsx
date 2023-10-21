@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom'; // Importa el componente Link
 import SearchBar from '../SearchBar/SearchBar';
 import Cards from '../Cards/Cards';
 import Card from '../Card/Card';
@@ -9,11 +10,12 @@ function HomePage() {
   const [gameNotFound, setGameNotFound] = useState(false);
   const [allGames, setAllGames] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState('');
-  const [selectedOrigin, setSelectedOrigin] = useState('Todos'); // Establece "Todos" como valor por defecto
-  const [genreOptions, setGenreOptions] = useState([]); // Opciones de género
+  const [selectedOrigin, setSelectedOrigin] = useState('Todos');
+  const [genreOptions, setGenreOptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const gamesPerPage = 15; // Cantidad de juegos por página
 
   useEffect(() => {
-    // Realiza la petición a la URL para obtener las opciones de género
     axios.get('http://localhost:3001/genres')
       .then((response) => {
         const data = response.data;
@@ -23,11 +25,12 @@ function HomePage() {
         console.error('Error al obtener las opciones de género:', error);
       });
 
-    // Realiza la petición a la API para obtener todos los juegos al cargar la página
+    // Obtener todos los juegos disponibles en la API
     axios.get('http://localhost:3001/videogames/')
       .then((response) => {
         const data = response.data;
         setAllGames(data);
+        console.log(data);
       })
       .catch((error) => {
         console.error('Error al obtener los juegos:', error);
@@ -53,32 +56,45 @@ function HomePage() {
       });
   };
 
-  // Define una función que verifica si un juego es de la API
-  const isAPIGame = (id) => /^\d+$/.test(id); // Verifica si el ID es un número
-
-  // Define una función que verifica si un juego es de la base de datos
+  const isAPIGame = (id) => /^\d+$/.test(id);
   function isDatabaseGame(id) {
-    // Verifica si el ID coincide con el formato de UUID utilizado en la base de datos
     return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id);
   }
 
-  // Filtrar la lista de juegos según el género y origen seleccionados
-  const filteredGames = allGames.filter((game) => {
+  const paginateGames = (allGames) => {
+    const indexOfLastGame = currentPage * gamesPerPage;
+    const indexOfFirstGame = indexOfLastGame - gamesPerPage;
+    return allGames.slice(indexOfFirstGame, indexOfLastGame);
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const filteredGames = paginateGames(allGames).filter((game) => {
     const genreMatch = !selectedGenre || game.genres.some((genre) => genre.name === selectedGenre);
     const isAPI = isAPIGame(game.id);
     const isDatabase = isDatabaseGame(game.id);
-    const isAllSelected = selectedOrigin === 'Todos'; // Verifica si se ha seleccionado "Todos"
+    const isAllSelected = selectedOrigin === 'Todos';
     const originMatch =
-      isAllSelected || // Mostrar todos los juegos si "Todos" está seleccionado
+      isAllSelected ||
       (selectedOrigin === 'API' && isAPI) ||
       (selectedOrigin === 'Base de Datos' && isDatabase);
-    return genreMatch && originMatch;
+      return genreMatch && originMatch;
+
   });
 
   return (
     <div>
       <h1>Home Page</h1>
       <SearchBar onSearch={handleSearch} />
+      <div>
+  <h1>Home Page</h1>
+  <Link to="/formpage">
+    <button>Ir a FormPage</button>
+  </Link>
+  {/* Resto del contenido */}
+</div>
 
       <div>
         <h2>Filtrar por Género:</h2>
@@ -120,6 +136,14 @@ function HomePage() {
           )}
         </div>
       )}
+
+      <div className="pagination">
+        {Array.from({ length: Math.ceil(allGames.length / gamesPerPage) }).map((_, index) => (
+          <button key={index} onClick={() => handlePageChange(index + 1)}>
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

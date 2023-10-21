@@ -1,0 +1,26 @@
+/* Card.module.css */
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 16px;
+    margin: 16px;
+    max-width: 300px;
+    text-align: center;
+  }
+  
+  .card img {
+    max-width: 100%;
+  }
+  
+  .card h3 {
+    margin: 8px 0;
+  }
+  
+  .card p {
+    color: #555;
+  }
+  .card {
+    display: inline-block; /* Muestra las tarjetas en línea (una al lado de la otra) */
+    margin: 16px; /* Añade un margen entre las tarjetas (ajusta según tus necesidades) */
+  }
