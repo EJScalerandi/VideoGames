@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Importa el componente Link
+import { Link } from 'react-router-dom';
 import SearchBar from '../SearchBar/SearchBar';
 import Cards from '../Cards/Cards';
 import Card from '../Card/Card';
@@ -13,7 +13,7 @@ function HomePage() {
   const [selectedOrigin, setSelectedOrigin] = useState('Todos');
   const [genreOptions, setGenreOptions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const gamesPerPage = 15; // Cantidad de juegos por página
+  const gamesPerPage = 15;
 
   useEffect(() => {
     axios.get('http://localhost:3001/genres')
@@ -25,12 +25,10 @@ function HomePage() {
         console.error('Error al obtener las opciones de género:', error);
       });
 
-    // Obtener todos los juegos disponibles en la API
     axios.get('http://localhost:3001/videogames/')
       .then((response) => {
         const data = response.data;
         setAllGames(data);
-        console.log(data);
       })
       .catch((error) => {
         console.error('Error al obtener los juegos:', error);
@@ -56,10 +54,8 @@ function HomePage() {
       });
   };
 
-  const isAPIGame = (id) => /^\d+$/.test(id);
-  function isDatabaseGame(id) {
-    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id);
-  }
+  const isAPIGame = (id) => typeof id === 'number';
+  const isDatabaseGame = (id) => typeof id === 'string';
 
   const paginateGames = (allGames) => {
     const indexOfLastGame = currentPage * gamesPerPage;
@@ -76,12 +72,13 @@ function HomePage() {
     const isAPI = isAPIGame(game.id);
     const isDatabase = isDatabaseGame(game.id);
     const isAllSelected = selectedOrigin === 'Todos';
+
     const originMatch =
       isAllSelected ||
       (selectedOrigin === 'API' && isAPI) ||
       (selectedOrigin === 'Base de Datos' && isDatabase);
-      return genreMatch && originMatch;
 
+    return genreMatch && originMatch;
   });
 
   return (
@@ -89,12 +86,11 @@ function HomePage() {
       <h1>Home Page</h1>
       <SearchBar onSearch={handleSearch} />
       <div>
-  <h1>Home Page</h1>
-  <Link to="/formpage">
-    <button>Ir a FormPage</button>
-  </Link>
-  {/* Resto del contenido */}
-</div>
+        <h1>Home Page</h1>
+        <Link to="/formpage">
+          <button>Ir a FormPage</button>
+        </Link>
+      </div>
 
       <div>
         <h2>Filtrar por Género:</h2>
