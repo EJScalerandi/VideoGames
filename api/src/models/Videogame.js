@@ -35,7 +35,8 @@ module.exports = (sequelize) => {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-  }, {timestamps: false});
+  }, {tableName: 'Videogames', // Nombre de la tabla en la base de datos
+  timestamps: false,});
 
   return Videogame;
 };

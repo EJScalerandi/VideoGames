@@ -1,14 +1,19 @@
 const axios = require('axios');
 require('dotenv').config();
 const { API_KEY } = process.env;
+const { Videogame } = require('../db');
 
 const getAllVideogames = async (req, res) => {
   try {
+    // Obtener videojuegos de la base de datos
+    const databaseVideogames = await Videogame.findAll();
+    console.log(databaseVideogames);
+    // Obtener videojuegos de la API
+    const maxGames = 250;
     const apiUrl = `https://api.rawg.io/api/games?key=${API_KEY}`;
-    let allVideogames = [];
+    let allVideogames = [...databaseVideogames];
     let page = 1;
-    let gamesObtained = 0;
-    const maxGames = 200;
+    let gamesObtained = databaseVideogames.length;
 
     while (gamesObtained < maxGames) {
       const response = await axios.get(apiUrl + `&page=${page}`);
@@ -33,5 +38,3 @@ const getAllVideogames = async (req, res) => {
 };
 
 module.exports = getAllVideogames;
-
-

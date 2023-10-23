@@ -4,8 +4,13 @@ function SearchBar({ onSearch }) {
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearch = () => {
-    // Llama a la función `onSearch` pasando el término de búsqueda
-    onSearch(searchValue);
+    // Validar si es un UUID o ID
+    if (/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(searchValue)) {
+      // Llama a la función `onSearch` pasando el término de búsqueda y un indicador de tipo (UUID o ID)
+      onSearch(searchValue, 'uuid');
+    } else {
+      onSearch(searchValue, 'id');
+    }
   };
 
   return (

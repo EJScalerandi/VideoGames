@@ -1,8 +1,7 @@
-const axios = require('axios');
-const { Op } = require('sequelize');
+
 const { Videogame, Gender} = require('../db');
 require('dotenv').config();
-const { API_KEY } = process.env;
+
 
 
 const createVideogames = async (req, res) => {
