@@ -1,10 +1,7 @@
 const { DataTypes } = require('sequelize');
 
-// Exportamos una funcion que define el modelo
-// Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
-  // defino el modelo
-   const Videogame = sequelize.define('Videogame', {
+  const Videogame = sequelize.define('Videogame', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -35,9 +32,16 @@ module.exports = (sequelize) => {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-  }, {tableName: 'Videogames', // Nombre de la tabla en la base de datos
-  timestamps: false,});
+  }, {tableName: 'Videogames', timestamps: false });
+
+  // En el modelo Videogame
+  Videogame.associate = (models) => {
+    Videogame.belongsToMany(models.Gender, {
+      through: 'Videogame_activity',
+      as: 'genders', // Alias para la relación
+      foreignKey: 'VideogameId', // Nombre de la clave foránea en la tabla intermedia
+    });
+  };
 
   return Videogame;
 };
-

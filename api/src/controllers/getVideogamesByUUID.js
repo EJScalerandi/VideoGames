@@ -1,30 +1,26 @@
-
 const { Videogame, Gender } = require('../db');
 require('dotenv').config();
 
-
 const getVideogamesByUUID = async (req, res) => {
-    console.log(Videogame)
-    const { uuid } = req.params;
+  const { uuid } = req.params;
   try {
-      const databaseVideogame = await Videogame.findByPk(uuid, {
-          include: [
-              {
-                  model: Gender,
-                  attributes: ['id', 'name'],
-                },
-            ],
-            attributes: [
-                'id',
-                'name',
-                'description',
-                'platform',
-                'image',
-                'releaseDate',
-                'rating',
-            ],
-        });
-       
+    const databaseVideogame = await Videogame.findByPk(uuid, {
+      include: [
+        {
+          model: Gender,
+          attributes: ['id', 'name'],
+        },
+      ],
+      attributes: [
+        'id',
+        'name',
+        'description',
+        'platform',
+        'image',
+        'releaseDate',
+        'rating',
+      ],
+    });
 
     if (databaseVideogame) {
       res.status(200).json(databaseVideogame);
@@ -37,3 +33,4 @@ const getVideogamesByUUID = async (req, res) => {
 };
 
 module.exports = getVideogamesByUUID;
+

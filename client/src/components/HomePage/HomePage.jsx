@@ -68,7 +68,11 @@ function HomePage() {
   };
 
   const filteredGames = paginateGames(allGames).filter((game) => {
-    const genreMatch = !selectedGenre || game.genres.some((genre) => genre.name === selectedGenre);
+    const genreMatch =
+      !selectedGenre ||
+      ((game.genres && game.genres.some((genre) => genre.name === selectedGenre)) ||
+        (game.genders && game.genders.some((gender) => gender.name === selectedGenre)));
+
     const isAPI = isAPIGame(game.id);
     const isDatabase = isDatabaseGame(game.id);
     const isAllSelected = selectedOrigin === 'Todos';
@@ -128,7 +132,7 @@ function HomePage() {
           {Array.isArray(filteredGames) && filteredGames.length > 0 ? (
             <Cards games={filteredGames} />
           ) : (
-            <p>No hay juegos disponibles.</p>
+            <p>Por favor aguarde mientras se cargan los juegos</p>
           )}
         </div>
       )}

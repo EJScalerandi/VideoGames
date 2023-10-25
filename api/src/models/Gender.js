@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  sequelize.define('Gender', {
+  const Gender = sequelize.define('Gender', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -11,6 +11,16 @@ module.exports = (sequelize) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      },
+    },
   }, { timestamps: false });
+
+  // No definas la relación aquí
+  // Gender.belongsToMany(Videogame, {
+  //   through: 'Videogame_activity',
+  //   as: 'genders', // Alias para la relación
+  //   foreignKey: 'GenderId', // Nombre de la clave foránea en la tabla intermedia
+  // });
+
+  return Gender;
 };
+

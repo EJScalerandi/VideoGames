@@ -11,7 +11,6 @@ const {
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/videogames`, {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-  sync: { force: false },
 });
 const basename = path.basename(__filename);
 
@@ -37,8 +36,17 @@ const { Videogame, Gender } = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
-Videogame.belongsToMany(Gender, {through: "videogames_activity"});
-Gender.belongsToMany(Videogame, {through: "videogames_activity"});
+Videogame.belongsToMany(Gender, {
+  through: 'Videogame_activity',
+  as: 'genders',
+  foreignKey: 'VideogameId',
+});
+
+Gender.belongsToMany(Videogame, {
+  through: 'Videogame_activity',
+  as: 'genders',
+  foreignKey: 'GenderId',
+});
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

@@ -1,13 +1,20 @@
 const axios = require('axios');
 require('dotenv').config();
 const { API_KEY } = process.env;
-const { Videogame } = require('../db');
+const { Videogame, Gender } = require('../db');
 
 const getAllVideogames = async (req, res) => {
   try {
-    // Obtener videojuegos de la base de datos
-    const databaseVideogames = await Videogame.findAll();
-    console.log(databaseVideogames);
+    // Obtener videojuegos de la base de datos incluyendo información de género
+    const databaseVideogames = await Videogame.findAll({
+      include: {
+        model: Gender, // El modelo de género
+        as: 'genders', // Especifica el alias 'genders'
+        attributes: ['name'], // Las columnas que deseas seleccionar
+        through: 'videogame_activity', // Corrige el nombre de la tabla intermedia
+      },
+    });
+
     // Obtener videojuegos de la API
     const maxGames = 250;
     const apiUrl = `https://api.rawg.io/api/games?key=${API_KEY}`;

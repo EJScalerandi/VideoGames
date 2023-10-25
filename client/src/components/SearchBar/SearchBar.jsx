@@ -1,17 +1,40 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function SearchBar({ onSearch }) {
   const [searchValue, setSearchValue] = useState('');
 
-  const handleSearch = () => {
-    // Validar si es un UUID o ID
-    if (/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(searchValue)) {
-      // Llama a la función `onSearch` pasando el término de búsqueda y un indicador de tipo (UUID o ID)
-      onSearch(searchValue, 'uuid');
+  const handleSearch = async () => {
+    const isNumber = !isNaN(searchValue);
+    const isUUID = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(searchValue);
+  
+    if (isNumber) {
+      try {
+        const response = await axios.get(`http://localhost:3001/videogames/id/${searchValue}`);
+        onSearch([response.data]); // Pasa el resultado como un array de un solo elemento
+      } catch (error) {
+        console.error('Error al buscar videojuego:', error);
+        onSearch([]);
+      }
+    } else if (isUUID) {
+      try {
+        const response = await axios.get(`http://localhost:3001/videogames/uuid/${searchValue}`);
+        onSearch([response.data]); // Pasa el resultado como un array de un solo elemento
+      } catch (error) {
+        console.error('Error al buscar videojuego:', error);
+        onSearch([]);
+      }
     } else {
-      onSearch(searchValue, 'id');
+      try {
+        const response = await axios.get(`http://localhost:3001/videogames/name/${searchValue}`);
+        onSearch([response.data]); // Pasa el resultado como un array de un solo elemento
+      } catch (error) {
+        console.error('Error al buscar videojuego:', error);
+        onSearch([]);
+      }
     }
   };
+  
 
   return (
     <div>
@@ -27,3 +50,4 @@ function SearchBar({ onSearch }) {
 }
 
 export default SearchBar;
+
