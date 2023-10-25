@@ -22,7 +22,13 @@ const createVideogames = async (req, res) => {
       releaseDate,
       rating,
     });
-
+    // Establece la URL de imagen predeterminada si no se proporciona una URL
+    const defaultImageURL = 'https://as2.ftcdn.net/v2/jpg/05/41/24/61/1000_F_541246162_nfth7B8wvZF58fxnjku114DNL6L602QX.jpg';
+    if(!newVideogame.image) {
+      newVideogame.image = defaultImageURL;
+      newVideogame.save();
+    }
+    
     console.log('newVideogame:', newVideogame);
 
     // Busca los géneros correspondientes en la tabla "Gender"
