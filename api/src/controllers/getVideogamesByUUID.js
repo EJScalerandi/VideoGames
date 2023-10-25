@@ -8,6 +8,7 @@ const getVideogamesByUUID = async (req, res) => {
       include: [
         {
           model: Gender,
+          as: 'genders', // Especifica el alias 'genders' aquí
           attributes: ['id', 'name'],
         },
       ],
@@ -33,4 +34,3 @@ const getVideogamesByUUID = async (req, res) => {
 };
 
 module.exports = getVideogamesByUUID;
-
