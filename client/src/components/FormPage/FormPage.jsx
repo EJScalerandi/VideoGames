@@ -9,7 +9,7 @@ function FormPage() {
     image: '',
     releaseDate: '',
     rating: '',
-    genres: '',
+    Genders: [], // Cambiado de 'genres' a 'Genders'
   });
 
   const [genreOptions, setGenreOptions] = useState([]);
@@ -18,6 +18,17 @@ function FormPage() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleGenreChange = (genre) => {
+    const updatedGenres = [...formData.Genders]; // Cambiado de 'genres' a 'Genders'
+    if (updatedGenres.includes(genre)) {
+      const genreIndex = updatedGenres.indexOf(genre);
+      updatedGenres.splice(genreIndex, 1);
+    } else {
+      updatedGenres.push(genre);
+    }
+    setFormData({ ...formData, Genders: updatedGenres }); // Cambiado de 'genres' a 'Genders'
   };
 
   useEffect(() => {
@@ -76,13 +87,13 @@ function FormPage() {
       return;
     }
 
-    // Resto del código para enviar la solicitud POST
+    console.log('Objeto JSON que se enviará al servidor:', formData);
+
     axios
       .post('http://localhost:3001/videogames/', formData)
       .then((response) => {
         console.log('Videojuego creado:', response.data);
         setSuccessMessage('El juego se creó exitosamente.');
-        // Aquí puedes redirigir al usuario a la página de inicio u otras acciones
       })
       .catch((error) => {
         console.error('Error al crear el videojuego:', error);
@@ -156,18 +167,18 @@ function FormPage() {
 
         <label>
           Género:
-          <select
-            name="genres"
-            value={formData.genres}
-            onChange={handleInputChange}
-          >
-            <option value="">Selecciona un género</option>
-            {genreOptions.map((genre) => (
-              <option key={genre} value={genre}>
-                {genre}
-              </option>
-            ))}
-          </select>
+          {genreOptions.map((genre) => (
+            <label key={genre}>
+              <input
+                type="checkbox"
+                name="genres"
+                value={genre}
+                checked={formData.Genders.includes(genre)} // Cambiado de 'genres' a 'Genders'
+                onChange={() => handleGenreChange(genre)}
+              />
+              {genre}
+            </label>
+          ))}
         </label>
 
         <button type="submit">Crear Videojuego</button>
@@ -177,3 +188,4 @@ function FormPage() {
 }
 
 export default FormPage;
+
