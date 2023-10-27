@@ -1,9 +1,10 @@
+// HomePage.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import SearchBar from '../SearchBar/SearchBar';
 import Cards from '../Cards/Cards';
 import Card from '../Card/Card';
+import SearchBar from '../SearchBar/SearchBar';
 
 function HomePage() {
   const [searchedGame, setSearchedGame] = useState(null);
@@ -36,31 +37,39 @@ function HomePage() {
   }, []);
 
   const handleSearch = (searchValue) => {
-    axios.get(`http://localhost:3001/videogames/${searchValue}`)
-      .then((response) => {
-        const data = response.data;
-        if (data) {
-          setSearchedGame(data);
-          setGameNotFound(false);
-        } else {
-          setSearchedGame(null);
-          setGameNotFound(true);
-        }
-      })
-      .catch((error) => {
-        console.error('Error al buscar videojuego:', error);
-        setSearchedGame(null);
-        setGameNotFound(true);
-      });
+    if (searchValue) {
+      setGameNotFound(false);
+      setSearchedGame(null);
+      handleSearchRequest(searchValue);
+    } else {
+      setGameNotFound(true);
+      setSearchedGame(null);
+    }
   };
 
-  const isAPIGame = (id) => typeof id === 'number';
-  const isDatabaseGame = (id) => typeof id === 'string';
+  const handleSearchRequest = async (searchValue) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/videogames/${searchValue}`);
+      const data = response.data;
+      if (data) {
+        setSearchedGame(data);
+      } else {
+        setGameNotFound(true);
+      }
+    } catch (error) {
+      console.error('Error al buscar videojuego:', error);
+      setSearchedGame(null);
+      setGameNotFound(true);
+    }
+  };
 
-  const paginateGames = (allGames) => {
+  const isAPIGame = (game) => typeof game.id === 'number';
+  const isDatabaseGame = (game) => typeof game.id === "string";
+
+  const paginateGames = (games) => {
     const indexOfLastGame = currentPage * gamesPerPage;
     const indexOfFirstGame = indexOfLastGame - gamesPerPage;
-    return allGames.slice(indexOfFirstGame, indexOfLastGame);
+    return games.slice(indexOfFirstGame, indexOfLastGame);
   };
 
   const handlePageChange = (pageNumber) => {
@@ -70,11 +79,10 @@ function HomePage() {
   const filteredGames = paginateGames(allGames).filter((game) => {
     const genreMatch =
       !selectedGenre ||
-      ((game.genres && game.genres.some((genre) => genre.name === selectedGenre)) ||
-        (game.genders && game.genders.some((gender) => gender.name === selectedGenre)));
+      (game.genres && game.genres.some((genre) => genre.name === selectedGenre));
 
-    const isAPI = isAPIGame(game.id);
-    const isDatabase = isDatabaseGame(game.id);
+    const isAPI = isAPIGame(game);
+    const isDatabase = isDatabaseGame(game);
     const isAllSelected = selectedOrigin === 'Todos';
 
     const originMatch =
@@ -92,16 +100,12 @@ function HomePage() {
       <div>
         <h1>Home Page</h1>
         <Link to="/formpage">
-          <button>Ir a FormPage</button>
+          <button>Crear un videojuego</button>
         </Link>
       </div>
-
       <div>
         <h2>Filtrar por Género:</h2>
-        <select
-          value={selectedGenre}
-          onChange={(e) => setSelectedGenre(e.target.value)}
-        >
+        <select value={selectedGenre} onChange={(e) => setSelectedGenre(e.target.value)}>
           <option value="">Todos</option>
           {genreOptions.map((genre) => (
             <option key={genre} value={genre}>
@@ -112,16 +116,12 @@ function HomePage() {
       </div>
       <div>
         <h2>Filtrar por Origen:</h2>
-        <select
-          value={selectedOrigin}
-          onChange={(e) => setSelectedOrigin(e.target.value)}
-        >
+        <select value={selectedOrigin} onChange={(e) => setSelectedOrigin(e.target.value)}>
           <option value="Todos">Todos</option>
           <option value="API">API</option>
           <option value="Base de Datos">Base de Datos</option>
         </select>
       </div>
-
       {searchedGame ? (
         <Card game={searchedGame} />
       ) : gameNotFound ? (
@@ -136,14 +136,6 @@ function HomePage() {
           )}
         </div>
       )}
-
-      <div className="pagination">
-        {Array.from({ length: Math.ceil(allGames.length / gamesPerPage) }).map((_, index) => (
-          <button key={index} onClick={() => handlePageChange(index + 1)}>
-            {index + 1}
-          </button>
-        ))}
-      </div>
     </div>
   );
 }

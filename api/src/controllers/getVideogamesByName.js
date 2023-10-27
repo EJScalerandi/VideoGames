@@ -1,36 +1,43 @@
-const axios = require('axios');
 const { Op } = require('sequelize');
 const { Videogame } = require('../db');
+const axios = require('axios');
 require('dotenv').config();
 const { API_KEY } = process.env;
 
 const getVideoGamesByName = async (req, res) => {
   try {
-    const { name } = req.query;
+    const { name } = req.params; // Obtén el nombre de los parámetros de la ruta
+ 
+    if (!name) {
+      return res.status(400).json({ message: 'El parámetro "name" es obligatorio.' });
+    }
 
-    // Realiza una búsqueda en la base de datos por nombre
+    // Convierte el valor a minúsculas
+    const lowerCaseName = name.toLowerCase();
+
+    // Busca en la base de datos
     const databaseVideogames = await Videogame.findAll({
       where: {
         name: {
-          [Op.iLike]: `%${name}%`, // Realiza una búsqueda insensible a mayúsculas y minúsculas
+          [Op.iLike]: `%${lowerCaseName}%`, // Realiza una búsqueda insensible a mayúsculas y minúsculas
         },
       },
-      limit: 15, // Limita el resultado a 15 videojuegos
+      limit: 15,
     });
+    console.log("buscado en bdd", databaseVideogames);
 
-    // Realiza una solicitud a la API externa para buscar videojuegos por nombre
-    const apiUrl = `https://api.rawg.io/api/games?key=${API_KEY}&search=${encodeURIComponent(name)}`;
+    // Busca en la API
+    const apiUrl = `https://api.rawg.io/api/games?key=${API_KEY}&search=${encodeURIComponent(lowerCaseName)}`;
     const response = await axios.get(apiUrl);
-    const apiVideogames = response.data.results.slice(0, 15); // Limita el resultado a 15 videojuegos
-
+    const apiVideogames = response.data.results.slice(0, 15);
+    console.log("buscado en api", apiVideogames);
     if (databaseVideogames.length === 0 && apiVideogames.length === 0) {
-      // Si no se encontraron videojuegos en la base de datos ni en la API
-      res.status(404).json({ message: 'No se encontraron videojuegos con ese nombre.' });
-    } else {
-      // Combina los resultados de la base de datos y la API
-      const mergedVideogames = [...databaseVideogames, ...apiVideogames];
-      res.status(200).json(mergedVideogames);
+      return res.status(404).json({ message: 'No se encontraron videojuegos con ese nombre.' });
     }
+
+    // Combina los resultados de la base de datos y la API
+    const mergedVideogames = [...databaseVideogames, ...apiVideogames];
+    res.status(200).json(mergedVideogames);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
