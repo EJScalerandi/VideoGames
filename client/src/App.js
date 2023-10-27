@@ -1,23 +1,27 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import HomePage from './components/HomePage/HomePage'; // Importa el componente HomePage
-import FormPage from './components/FormPage/FormPage'; // Importa el componente FormPage
+import HomePage from './components/HomePage/HomePage';
+import FormPage from './components/FormPage/FormPage';
 import Detail from './components/Detail/Detail';
 import LandingPage from './components/LandingPage/LandingPage';
+import { Provider } from 'react-redux'; // Importa Provider
+import store from './Redux/store'; // Importa tu store
 
 function App() {
   return (
-    <Router>
-      <Switch>
-        <Route path="/home" component={HomePage} />
-        <Route path="/FormPage" component={FormPage} /> {/* Agrega una ruta para la página de creación de videojuegos */}
-        <Route exact path="/" component={LandingPage} /> {/* Asegúrate de importar LandingPage si es necesario */}
-        {/* Agrega una ruta para la página de detalles del videojuego */}
-        <Route path="/game/:id" component={Detail} />
-      </Switch>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Switch>
+          <Route path="/home" component={HomePage} />
+          <Route path="/FormPage" component={FormPage} />
+          <Route exact path="/" component={LandingPage} />
+          <Route path="/game/:id" component={Detail} />
+        </Switch>
+      </Router>
+    </Provider>
   );
 }
 
 export default App;
+

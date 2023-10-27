@@ -1,9 +1,14 @@
-
-import React from 'react';
-import fondo from '../../fondo.jpg'; 
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import fondo from '../../fondo.jpg';
 import { Link } from 'react-router-dom';
+import {
+  setAllGames,
+  setGenreOptions,
+} from '../../Redux/actions';
+import axios from 'axios';
 
-function LandingPage() {
+function LandingPage(props) {
   const backgroundStyle = {
     backgroundImage: `url(${fondo})`,
     backgroundSize: 'cover',
@@ -23,9 +28,31 @@ function LandingPage() {
     borderRadius: '15px',
     cursor: 'pointer',
     marginTop: '20px',
-    marginRight: '750px', 
+    marginRight: '750px',
     fontSize: '36px',
   };
+
+  useEffect(() => {
+    // Realiza la solicitud para obtener los juegos
+    axios.get('http://localhost:3001/videogames/')
+      .then((response) => {
+        const data = response.data;
+        props.setAllGames(data); // Almacena los juegos en el store
+      })
+      .catch((error) => {
+        console.error('Error al obtener los juegos:', error);
+      });
+
+    // Realiza la solicitud para obtener las opciones de género
+    axios.get('http://localhost:3001/genres')
+      .then((response) => {
+        const data = response.data;
+        props.setGenreOptions(data); // Almacena las opciones de género en el store
+      })
+      .catch((error) => {
+        console.error('Error al obtener las opciones de género:', error);
+      });
+  }, [props.setAllGames, props.setGenreOptions]);
 
   return (
     <div className="landing-page" style={backgroundStyle}>
@@ -36,4 +63,10 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
+const mapDispatchToProps = {
+  setAllGames,
+  setGenreOptions,
+};
+
+export default connect(null, mapDispatchToProps)(LandingPage);
+

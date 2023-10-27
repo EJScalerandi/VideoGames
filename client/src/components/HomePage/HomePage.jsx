@@ -1,49 +1,53 @@
-// HomePage.js
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import Cards from '../Cards/Cards';
-import Card from '../Card/Card';
+import {
+  setSearchGame,
+  setGameNotFound,
+  setAllGames,
+  setSelectedGenre,
+  setSelectedOrigin,
+  setGenreOptions,
+} from '../../Redux/actions';
 import SearchBar from '../SearchBar/SearchBar';
+import Card from '../Card/Card';
+import Cards from '../Cards/Cards';
+import { Link } from 'react-router-dom';
 
-function HomePage() {
-  const [searchedGame, setSearchedGame] = useState(null);
-  const [gameNotFound, setGameNotFound] = useState(false);
-  const [allGames, setAllGames] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState('');
-  const [selectedOrigin, setSelectedOrigin] = useState('Todos');
-  const [genreOptions, setGenreOptions] = useState([]);
+function HomePage(props) {
+  const {
+    searchedGame,
+    gameNotFound,
+    allGames,
+    selectedGenre,
+    selectedOrigin,
+    genreOptions,
+    setSearchGame,
+    setGameNotFound,
+    setAllGames,
+    setSelectedGenre,
+    setSelectedOrigin,
+    setGenreOptions,
+  } = props;
+
   const [currentPage, setCurrentPage] = useState(1);
   const gamesPerPage = 15;
 
   useEffect(() => {
-    axios.get('http://localhost:3001/genres')
-      .then((response) => {
-        const data = response.data;
-        setGenreOptions(data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener las opciones de género:', error);
-      });
+    // La carga de datos se ha movido al componente LandingPage
 
-    axios.get('http://localhost:3001/videogames/')
-      .then((response) => {
-        const data = response.data;
-        setAllGames(data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener los juegos:', error);
-      });
-  }, []);
+    // ...
+
+  }, [setAllGames, setGenreOptions]);
 
   const handleSearch = (searchValue) => {
     if (searchValue) {
       setGameNotFound(false);
-      setSearchedGame(null);
+      setSearchGame(null);
       handleSearchRequest(searchValue);
     } else {
       setGameNotFound(true);
-      setSearchedGame(null);
+      setSearchGame(null);
     }
   };
 
@@ -52,19 +56,19 @@ function HomePage() {
       const response = await axios.get(`http://localhost:3001/videogames/${searchValue}`);
       const data = response.data;
       if (data) {
-        setSearchedGame(data);
+        setSearchGame(data);
       } else {
         setGameNotFound(true);
       }
     } catch (error) {
       console.error('Error al buscar videojuego:', error);
-      setSearchedGame(null);
+      setSearchGame(null);
       setGameNotFound(true);
     }
   };
 
   const isAPIGame = (game) => typeof game.id === 'number';
-  const isDatabaseGame = (game) => typeof game.id === "string";
+  const isDatabaseGame = (game) => typeof game.id === 'string';
 
   const paginateGames = (games) => {
     const indexOfLastGame = currentPage * gamesPerPage;
@@ -134,10 +138,38 @@ function HomePage() {
           ) : (
             <p>Por favor aguarde mientras se cargan los juegos</p>
           )}
+          <ul className="pagination">
+            {Array.from({ length: Math.ceil(allGames.length / gamesPerPage) }).map((_, index) => (
+              <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+                <button
+                  className="page-link"
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
   );
 }
 
-export default HomePage;
+const mapStateToProps = (state) => ({
+  searchedGame: state.searchedGame,
+  gameNotFound: state.gameNotFound,
+  allGames: state.allGames,
+  selectedGenre: state.selectedGenre,
+  selectedOrigin: state.selectedOrigin,
+  genreOptions: state.genreOptions,
+});
+
+export default connect(mapStateToProps, {
+  setSearchGame,
+  setGameNotFound,
+  setAllGames,
+  setSelectedGenre,
+  setSelectedOrigin,
+  setGenreOptions,
+})(HomePage);
