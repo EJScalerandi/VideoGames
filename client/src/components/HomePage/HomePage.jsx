@@ -9,21 +9,17 @@ import {
   setSelectedOrigin,
   setGenreOptions,
 } from '../../Redux/actions';
-import SearchBar from '../SearchBar/SearchBar';
 import Card from '../Card/Card';
 import Cards from '../Cards/Cards';
 import { Link } from 'react-router-dom';
+import styles from './HomePage.module.css';
 
 function HomePage(props) {
   const {
-    searchedGame,
-    gameNotFound,
     allGames,
     selectedGenre,
     selectedOrigin,
     genreOptions,
-    setSearchGame,
-    setGameNotFound,
     setAllGames,
     setSelectedGenre,
     setSelectedOrigin,
@@ -32,40 +28,6 @@ function HomePage(props) {
 
   const [currentPage, setCurrentPage] = useState(1);
   const gamesPerPage = 15;
-
-  useEffect(() => {
-    // La carga de datos se ha movido al componente LandingPage
-
-    // ...
-
-  }, [setAllGames, setGenreOptions]);
-
-  const handleSearch = (searchValue) => {
-    if (searchValue) {
-      setGameNotFound(false);
-      setSearchGame(null);
-      handleSearchRequest(searchValue);
-    } else {
-      setGameNotFound(true);
-      setSearchGame(null);
-    }
-  };
-
-  const handleSearchRequest = async (searchValue) => {
-    try {
-      const response = await axios.get(`http://localhost:3001/videogames/${searchValue}`);
-      const data = response.data;
-      if (data) {
-        setSearchGame(data);
-      } else {
-        setGameNotFound(true);
-      }
-    } catch (error) {
-      console.error('Error al buscar videojuego:', error);
-      setSearchGame(null);
-      setGameNotFound(true);
-    }
-  };
 
   const isAPIGame = (game) => typeof game.id === 'number';
   const isDatabaseGame = (game) => typeof game.id === 'string';
@@ -83,33 +45,51 @@ function HomePage(props) {
   const filteredGames = paginateGames(allGames).filter((game) => {
     const genreMatch =
       !selectedGenre ||
-      (game.genres && game.genres.some((genre) => genre.name === selectedGenre));
-
-    const isAPI = isAPIGame(game);
-    const isDatabase = isDatabaseGame(game);
-    const isAllSelected = selectedOrigin === 'Todos';
+      (game.genres &&
+        game.genres.some((genre) => genre.name === selectedGenre)) ||
+      (game.genders &&
+        game.genders.some((gender) => gender.name === selectedGenre));
 
     const originMatch =
-      isAllSelected ||
-      (selectedOrigin === 'API' && isAPI) ||
-      (selectedOrigin === 'Base de Datos' && isDatabase);
+      selectedGenre
+        ? true
+        : selectedOrigin === 'API'
+        ? isAPIGame(game)
+        : selectedOrigin === 'Base de Datos'
+        ? isDatabaseGame(game)
+        : true;
 
     return genreMatch && originMatch;
   });
 
+  useEffect(() => {
+    // Realiza la solicitud para obtener los juegos
+    axios.get('http://localhost:3001/videogames')
+      .then((response) => {
+        const data = response.data;
+        setAllGames(data);
+      })
+      .catch((error) => {
+        console.error('Error al obtener los juegos:', error);
+      });
+  }, [setAllGames]);
+
   return (
-    <div>
-      <h1>Home Page</h1>
-      <SearchBar onSearch={handleSearch} />
-      <div>
-        <h1>Home Page</h1>
+    <div className={styles.homePage}>
+      <h1 className={styles.pageTitle}>GamesConsult</h1>
+
+      <div className={styles.buttonContainer}>
         <Link to="/formpage">
-          <button>Crear un videojuego</button>
+          <button className={styles.createButton}>Crear un videojuego</button>
         </Link>
       </div>
-      <div>
-        <h2>Filtrar por Género:</h2>
-        <select value={selectedGenre} onChange={(e) => setSelectedGenre(e.target.value)}>
+      <div className={styles.filterContainer}>
+        <h2 className={styles.filterTitle}>Filtrar por Género:</h2>
+        <select
+          className={styles.select}
+          value={selectedGenre}
+          onChange={(e) => setSelectedGenre(e.target.value)}
+        >
           <option value="">Todos</option>
           {genreOptions.map((genre) => (
             <option key={genre} value={genre}>
@@ -118,47 +98,48 @@ function HomePage(props) {
           ))}
         </select>
       </div>
-      <div>
-        <h2>Filtrar por Origen:</h2>
-        <select value={selectedOrigin} onChange={(e) => setSelectedOrigin(e.target.value)}>
+      <div className={styles.filterContainer}>
+        <h2 className={styles.filterTitle}>Filtrar por Origen:</h2>
+        <select
+          className={styles.select}
+          value={selectedOrigin}
+          onChange={(e) => setSelectedOrigin(e.target.value)}
+        >
           <option value="Todos">Todos</option>
           <option value="API">API</option>
           <option value="Base de Datos">Base de Datos</option>
         </select>
       </div>
-      {searchedGame ? (
-        <Card game={searchedGame} />
-      ) : gameNotFound ? (
-        <p>Juego no encontrado.</p>
-      ) : (
-        <div>
-          <h2>Lista de Juegos</h2>
-          {Array.isArray(filteredGames) && filteredGames.length > 0 ? (
-            <Cards games={filteredGames} />
-          ) : (
-            <p>Por favor aguarde mientras se cargan los juegos</p>
-          )}
-          <ul className="pagination">
-            {Array.from({ length: Math.ceil(allGames.length / gamesPerPage) }).map((_, index) => (
-              <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
-                <button
-                  className="page-link"
-                  onClick={() => handlePageChange(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div>
+        <h2>Lista de Juegos</h2>
+        {Array.isArray(filteredGames) && filteredGames.length > 0 ? (
+          <Cards games={filteredGames} />
+        ) : (
+          <p>Por favor aguarde mientras se cargan los juegos</p>
+        )}
+        <ul className={styles.pagination}>
+          {Array.from({ length: Math.ceil(allGames.length / gamesPerPage) }).map((_, index) => (
+            <li
+              key={index}
+              className={`${styles.pageItem} ${
+                index + 1 === currentPage ? styles.activePage : ''
+              }`}
+            >
+              <button
+                className={styles.pageLink}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
 
 const mapStateToProps = (state) => ({
-  searchedGame: state.searchedGame,
-  gameNotFound: state.gameNotFound,
   allGames: state.allGames,
   selectedGenre: state.selectedGenre,
   selectedOrigin: state.selectedOrigin,
@@ -166,8 +147,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  setSearchGame,
-  setGameNotFound,
   setAllGames,
   setSelectedGenre,
   setSelectedOrigin,

@@ -14,17 +14,19 @@ const getAllVideogames = async (req, res) => {
         through: 'videogame_activity', // Corrige el nombre de la tabla intermedia
       },
     });
+   
 
     // Obtener videojuegos de la API
-    const maxGames = 250;
+    const maxGames = 10;
     const apiUrl = `https://api.rawg.io/api/games?key=${API_KEY}`;
     let allVideogames = [...databaseVideogames];
     let page = 1;
     let gamesObtained = databaseVideogames.length;
-
+  
     while (gamesObtained < maxGames) {
       const response = await axios.get(apiUrl + `&page=${page}`);
       const gamesOnPage = response.data.results;
+  
 
       if (gamesOnPage.length === 0) {
         break; // No more games available

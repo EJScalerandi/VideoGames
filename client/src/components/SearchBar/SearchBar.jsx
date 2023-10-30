@@ -1,24 +1,20 @@
-// SearchBar.js
 import React, { useState } from 'react';
-import axios from 'axios';
 
-function SearchBar({ onSearch }) {
+function SearchBar({ onSearch, allGames }) {
   const [searchValue, setSearchValue] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSearch = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`http://localhost:3001/videogames/${searchValue}`);
-      onSearch(response.data);
-    } catch (error) {
-      console.error('Error al buscar videojuego:', error);
-      onSearch([]);
-    } finally {
-      setLoading(false);
-    }
-  }
 
+  const handleSearch = (searchValue) => {
+    if (searchValue) {
+      setGameNotFound(false);
+      setSearchGame(null);
+      handleSearchRequest(searchValue);
+    } else {
+      setGameNotFound(true);
+      setSearchGame(null);
+    }
+  };
   return (
     <div>
       <input

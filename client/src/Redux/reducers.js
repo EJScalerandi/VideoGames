@@ -9,7 +9,7 @@ import {
   } from './actions';
   
   const initialState = {
-    searchedGame: null,
+    searchedGame: [],
     gameNotFound: false,
     allGames: [],
     selectedGenre: '',

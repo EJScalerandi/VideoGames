@@ -1,0 +1,24 @@
+/* Cards.module.css */
+
+.cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Para que las tarjetas se ajusten horizontalmente */
+  }
+  
+  .cardLink {
+    text-decoration: none;
+    margin: 10px;
+    width: calc(33.33% - 20px); /* 33.33% para un máximo de 3 tarjetas por fila, ajusta según tus necesidades */
+    box-sizing: border-box;
+  }
+  
+  /* Estilos de las tarjetas (deja el resto de los estilos igual) */
+  .card {
+    background-color: #bfe1ff;
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  

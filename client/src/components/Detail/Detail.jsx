@@ -1,46 +1,77 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom'; // Importa useParams desde react-router-dom
 import axios from 'axios';
+import styles from './Detail.module.css';
+import { Link } from 'react-router-dom';
 
-function Detail({ match }) {
+function Detail() {
+  const { id } = useParams(); // Obtén el parámetro 'id' de la URL
+
   const [gameDetails, setGameDetails] = useState(null);
+  const [isDataFromAPI, setIsDataFromAPI] = useState(false);
 
   useEffect(() => {
-    const gameId = match.params.id; // Obtiene el ID del juego desde los parámetros de la URL
-    const isUUID = gameId.match(/^[0-9a-fA-F-]{36}$/); // Verifica si el ID es un UUID
+    const isUUID = id.match(/^[0-9a-fA-F-]{36}$/);
 
-    // Construye la URL de la solicitud basada en el tipo de ID
     const apiUrl = isUUID
-      ? `http://localhost:3001/videogames/uuid/${gameId}`
-      : `http://localhost:3001/videogames/id/${gameId}`;
+      ? `http://localhost:3001/videogames/uuid/${id}`
+      : `http://localhost:3001/videogames/id/${id}`;
 
-    axios.get(apiUrl)
+    axios
+      .get(apiUrl)
       .then((response) => {
         const data = response.data;
         setGameDetails(data);
+        setIsDataFromAPI(data.genres && data.genres.length > 0);
       })
       .catch((error) => {
         console.error('Error al obtener los detalles del juego:', error);
       });
-  }, [match.params.id]);
+  }, [id]);
 
   if (!gameDetails) {
     return <p>Cargando...</p>;
   }
 
-  // Renderiza los detalles completos del juego aquí
-  return (
-    <div>
-      <h1>{gameDetails.name}</h1>
-      <p>Descripcion: {gameDetails.description}</p>
-      <h3>Plataforma: {gameDetails.platform}</h3>
-      <img src={gameDetails.image || 'URL_POR_DEFECTO'} alt={gameDetails.name} />
-      <h3>Fecha de lanzamiento: {gameDetails.releaseDate}</h3>
-      <h3>Rating: {gameDetails.rating}</h3>
-      <p>Género: {gameDetails.genders && gameDetails.genders.map((genre) => genre.name).join(', ')}</p>
+  function removeHTMLTags(text) {
+    return text.replace(/<p>|<\/p>|<br \/>/g, '');
+  }
 
-      {/* Agrega el resto de los detalles del juego aquí */}
+  function getSpanishDescription() {
+    const espanolDescription = gameDetails.description.split('Español');
+    return espanolDescription.length > 1
+      ? removeHTMLTags(espanolDescription[1])
+      : removeHTMLTags(gameDetails.description);
+  }
+
+  return (
+    <div className={styles.detailsContainer}>
+      <div className={styles.navigation}>
+        <Link to="/home/" className={`${styles.homeLink} ${styles.buttonEntryStyle}`}>Volver al Home</Link>
+      </div>
+      <div className={styles.gameTitle}>
+        <h1>{gameDetails.name}</h1>
+      </div>
+      <div className={styles.description}>
+        <p>Descripción: {getSpanishDescription()}</p>
+      </div>
+      <div className={styles.gameImage}>
+        <img
+          src={gameDetails.image || 'URL_POR_DEFECTO'}
+          alt={gameDetails.name}
+          className={styles.gameImageSize}
+        />
+      </div>
+      <div className={styles.additionalInfo}>
+        {isDataFromAPI && (
+          <p className={styles.genres}>Género: {gameDetails.genres && gameDetails.genres.map((genre) => genre.name).join(', ')}</p>
+        )}
+        <p className={styles.releaseDate}>Fecha de lanzamiento: {gameDetails.releaseDate.substring(0, 10)}</p>
+        <p className={styles.rating}>Rating: {gameDetails.rating}</p>
+      </div>
     </div>
   );
 }
 
 export default Detail;
+

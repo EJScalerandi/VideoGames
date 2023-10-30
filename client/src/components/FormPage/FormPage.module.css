@@ -1,0 +1,42 @@
+.form-container {
+    text-align: center;
+    border: 2px solid black;
+    background-color: #bfe1ff;
+    padding: 16px;
+    margin: 0 auto; /* Centra el formulario horizontalmente */
+    width: 500px; /* Cambia el ancho a 500px o al valor que prefieras */
+  }
+  
+  .form-title {
+    background-color: #bfe1ff;
+    margin: 0;
+    padding: 8px;
+  }
+  
+  .form-card {
+    padding: 16px;
+    text-align: left;
+  }
+  
+  .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .cardText {
+    font-weight: bold;
+  }
+  
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .card-button {
+    background-color: #bfe1ff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  

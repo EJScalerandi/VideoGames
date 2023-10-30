@@ -1,0 +1,75 @@
+.homePage {
+    background: linear-gradient(to bottom, #0077b6, #0099b5);
+    color: red;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .pageTitle {
+    font-size: 48px;
+    margin: 0;
+    padding: 10px;
+  }
+  
+  .buttonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .createButton {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 24px;
+  }
+  
+  .filterContainer {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .filterTitle {
+    margin: 0;
+    margin-right: 10px;
+    font-size: 20px;
+  }
+  
+  .select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid red;
+    border-radius: 5px;
+  }
+  
+  .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .pageItem {
+    margin: 0 5px;
+  }
+  
+  .pageLink {
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .activePage {
+    background-color: #0099b5;
+    color: white;
+  }
+  

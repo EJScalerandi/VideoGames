@@ -1,27 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import HomePage from './components/HomePage/HomePage';
 import FormPage from './components/FormPage/FormPage';
 import Detail from './components/Detail/Detail';
 import LandingPage from './components/LandingPage/LandingPage';
-import { Provider } from 'react-redux'; // Importa Provider
-import store from './Redux/store'; // Importa tu store
+import { setGenreOptions } from './Redux/actions'; // Importa setGenreOptions
+import { connect } from 'react-redux'; // Importa connect
 
-function App() {
+function App(props) {
+  useEffect(() => {
+    // Realiza la llamada a setGenreOptions solo una vez cuando se carga la aplicación
+    props.setGenreOptions();
+  }, [props.setGenreOptions]);
+
   return (
-    <Provider store={store}>
-      <Router>
-        <Switch>
-          <Route path="/home" component={HomePage} />
-          <Route path="/FormPage" component={FormPage} />
-          <Route exact path="/" component={LandingPage} />
-          <Route path="/game/:id" component={Detail} />
-        </Switch>
-      </Router>
-    </Provider>
+    <Routes>
+      <Route path="/home" element={<HomePage />} />
+      <Route path="/FormPage" element={<FormPage />} />
+      <Route exact path="/" element={<LandingPage />} />
+      <Route path="/game/:id" element={<Detail />} />
+    </Routes>
   );
 }
 
-export default App;
+const mapDispatchToProps = {
+  setGenreOptions,
+};
 
+export default connect(null, mapDispatchToProps)(App);

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { setGenreOptions } from '../../Redux/actions';
 import axios from 'axios';
+import styles from './FormPage.module.css'; // Importa los estilos
 
-function FormPage() {
+function FormPage(props) {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -9,50 +12,36 @@ function FormPage() {
     image: '',
     releaseDate: '',
     rating: '',
-    Genders: [], // Cambiado de 'genres' a 'Genders'
+    Genders: [],
   });
 
-  const [genreOptions, setGenreOptions] = useState([]);
+  const { genreOptions } = props;
+
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  };
+  }
 
   const handleGenreChange = (genre) => {
-    const updatedGenres = [...formData.Genders]; // Cambiado de 'genres' a 'Genders'
+    const updatedGenres = [...formData.Genders];
     if (updatedGenres.includes(genre)) {
       const genreIndex = updatedGenres.indexOf(genre);
       updatedGenres.splice(genreIndex, 1);
     } else {
       updatedGenres.push(genre);
     }
-    setFormData({ ...formData, Genders: updatedGenres }); // Cambiado de 'genres' a 'Genders'
-  };
-
-  useEffect(() => {
-    axios.get('http://localhost:3001/genres')
-      .then((response) => {
-        const data = response.data;
-        setGenreOptions(data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener las opciones de género:', error);
-      });
-  }, []);
+    setFormData({ ...formData, Genders: updatedGenres });
+  }
 
   const isValidURL = (url) => {
-    // Implementa una lógica para validar que sea una URL válida
-    // Devuelve true si es una URL válida, false en caso contrario
     return true;
-  };
+  }
 
   const isValidDate = (date) => {
-    // Implementa una lógica para validar que sea una fecha válida (AAAA-MM-DD)
-    // Devuelve true si es una fecha válida, false en caso contrario
     return true;
-  };
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -87,8 +76,6 @@ function FormPage() {
       return;
     }
 
-    console.log('Objeto JSON que se enviará al servidor:', formData);
-
     axios
       .post('http://localhost:3001/videogames/', formData)
       .then((response) => {
@@ -98,94 +85,98 @@ function FormPage() {
       .catch((error) => {
         console.error('Error al crear el videojuego:', error);
       });
-  };
+  }
 
   return (
-    <div>
-      <h1>Crear Nuevo Videojuego</h1>
-      {successMessage && <p>{successMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Nombre:
+    <div className={styles['form-container']}>
+      <h1 className={styles['form-title']}>Carga un nuevo Videojuego</h1>
+      {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
+      <form onSubmit={handleSubmit} className={styles['form-card']}>
+        <div className={styles['form-group']}>
+          <label className={styles.cardText}>Nombre:</label>
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleInputChange}
           />
-        </label>
+        </div>
 
-        <label>
-          Descripción:
-          <input
-            type="text"
+        <div className={styles['form-group']}>
+          <label className={styles.cardText}>Descripción:</label>
+          <textarea
             name="description"
             value={formData.description}
             onChange={handleInputChange}
           />
-        </label>
+        </div>
 
-        <label>
-          Plataforma:
+        <div className={styles['form-group']}>
+          <label className={styles.cardText}>Plataforma:</label>
           <input
             type="text"
             name="platform"
             value={formData.platform}
             onChange={handleInputChange}
           />
-        </label>
+        </div>
 
-        <label>
-          Imagen (URL):
+        <div className={styles['form-group']}>
+          <label className={styles.cardText}>Imagen (URL):</label>
           <input
             type="url"
             name="image"
             value={formData.image}
             onChange={handleInputChange}
           />
-        </label>
+        </div>
 
-        <label>
-          Fecha de Lanzamiento (AAAA-MM-DD):
+        <div className={styles['form-group']}>
+          <label className={styles.cardText}>Fecha de Lanzamiento (AAAA-MM-DD):</label>
           <input
             type="text"
             name="releaseDate"
             value={formData.releaseDate}
             onChange={handleInputChange}
           />
-        </label>
+        </div>
 
-        <label>
-          Calificación:
+        <div className={styles['form-group']}>
+          <label className={styles.cardText}>Calificación:</label>
           <input
             type="number"
             name="rating"
             value={formData.rating}
             onChange={handleInputChange}
           />
-        </label>
+        </div>
 
-        <label>
-          Género:
+        <div className={styles['form-group']}>
+          <label className={styles.cardText}>Género:</label>
           {genreOptions.map((genre) => (
             <label key={genre}>
               <input
                 type="checkbox"
-                name="genres"
+                name="Genders"
                 value={genre}
-                checked={formData.Genders.includes(genre)} // Cambiado de 'genres' a 'Genders'
+                checked={formData.Genders.includes(genre)}
                 onChange={() => handleGenreChange(genre)}
               />
               {genre}
             </label>
           ))}
-        </label>
+        </div>
 
-        <button type="submit">Crear Videojuego</button>
+        <button type="submit" className={styles['card-button']}>
+          Crear Videojuego
+        </button>
       </form>
     </div>
   );
 }
 
-export default FormPage;
+const mapStateToProps = (state) => ({
+  genreOptions: state.genreOptions,
+});
 
+export default connect(mapStateToProps)(FormPage);
