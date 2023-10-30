@@ -1,3 +1,4 @@
+// HomePage.js
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -32,17 +33,7 @@ function HomePage(props) {
   const isAPIGame = (game) => typeof game.id === 'number';
   const isDatabaseGame = (game) => typeof game.id === 'string';
 
-  const paginateGames = (games) => {
-    const indexOfLastGame = currentPage * gamesPerPage;
-    const indexOfFirstGame = indexOfLastGame - gamesPerPage;
-    return games.slice(indexOfFirstGame, indexOfLastGame);
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const filteredGames = paginateGames(allGames).filter((game) => {
+  const filteredGames = allGames.filter((game) => {
     const genreMatch =
       !selectedGenre ||
       (game.genres &&
@@ -50,17 +41,31 @@ function HomePage(props) {
       (game.genders &&
         game.genders.some((gender) => gender.name === selectedGenre));
 
-    const originMatch =
-      selectedGenre
-        ? true
-        : selectedOrigin === 'API'
-        ? isAPIGame(game)
-        : selectedOrigin === 'Base de Datos'
-        ? isDatabaseGame(game)
-        : true;
+        const originMatch =
+        selectedGenre
+          ? true
+          : selectedOrigin === 'API'
+          ? isAPIGame(game)
+          : selectedOrigin === 'Base de Datos'
+          ? isDatabaseGame(game)
+          : true;
+      
 
     return genreMatch && originMatch;
   });
+
+  const totalGames = filteredGames.length;
+  const totalPages = Math.ceil(totalGames / gamesPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const getPageGames = () => {
+    const indexOfLastGame = currentPage * gamesPerPage;
+    const indexOfFirstGame = indexOfLastGame - gamesPerPage;
+    return filteredGames.slice(indexOfFirstGame, indexOfLastGame);
+  };
 
   useEffect(() => {
     // Realiza la solicitud para obtener los juegos
@@ -73,6 +78,10 @@ function HomePage(props) {
         console.error('Error al obtener los juegos:', error);
       });
   }, [setAllGames]);
+
+  useEffect(() => {
+    setCurrentPage(1); // Restablece la página actual a 1 cuando se cambian los filtros
+  }, [selectedGenre, selectedOrigin]);
 
   return (
     <div className={styles.homePage}>
@@ -113,27 +122,29 @@ function HomePage(props) {
       <div>
         <h2>Lista de Juegos</h2>
         {Array.isArray(filteredGames) && filteredGames.length > 0 ? (
-          <Cards games={filteredGames} />
+          <>
+            <Cards currentPageGames={getPageGames()} />
+            <ul className={styles.pagination}>
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <li
+                  key={index}
+                  className={`${styles.pageItem} ${
+                    index + 1 === currentPage ? styles.activePage : ''
+                  }`}
+                >
+                  <button
+                    className={styles.pageLink}
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </>
         ) : (
           <p>Por favor aguarde mientras se cargan los juegos</p>
         )}
-        <ul className={styles.pagination}>
-          {Array.from({ length: Math.ceil(allGames.length / gamesPerPage) }).map((_, index) => (
-            <li
-              key={index}
-              className={`${styles.pageItem} ${
-                index + 1 === currentPage ? styles.activePage : ''
-              }`}
-            >
-              <button
-                className={styles.pageLink}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );

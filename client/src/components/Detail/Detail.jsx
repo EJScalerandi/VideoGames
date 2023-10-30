@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; // Importa useParams desde react-router-dom
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import styles from './Detail.module.css';
 import { Link } from 'react-router-dom';
 
 function Detail() {
-  const { id } = useParams(); // Obtén el parámetro 'id' de la URL
-
+  const { id } = useParams();
   const [gameDetails, setGameDetails] = useState(null);
   const [isDataFromAPI, setIsDataFromAPI] = useState(false);
 
   useEffect(() => {
     const isUUID = id.match(/^[0-9a-fA-F-]{36}$/);
-
     const apiUrl = isUUID
       ? `http://localhost:3001/videogames/uuid/${id}`
       : `http://localhost:3001/videogames/id/${id}`;
@@ -63,8 +61,14 @@ function Detail() {
         />
       </div>
       <div className={styles.additionalInfo}>
-        {isDataFromAPI && (
-          <p className={styles.genres}>Género: {gameDetails.genres && gameDetails.genres.map((genre) => genre.name).join(', ')}</p>
+        {isDataFromAPI ? (
+          <p className={styles.genres}>
+            Género: {gameDetails.genres && gameDetails.genres.map((genre) => genre.name).join(', ')}
+          </p>
+        ) : (
+          <p className={styles.genres}>
+            Género: {gameDetails.genders && gameDetails.genders.map((gender) => gender.name).join(', ')}
+          </p>
         )}
         <p className={styles.releaseDate}>Fecha de lanzamiento: {gameDetails.releaseDate.substring(0, 10)}</p>
         <p className={styles.rating}>Rating: {gameDetails.rating}</p>
@@ -74,4 +78,3 @@ function Detail() {
 }
 
 export default Detail;
-
