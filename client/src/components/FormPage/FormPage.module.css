@@ -1,42 +1,85 @@
+/* FormPage.module.css */
+
 .form-container {
-    text-align: center;
-    border: 2px solid black;
-    background-color: #bfe1ff;
-    padding: 16px;
-    margin: 0 auto; /* Centra el formulario horizontalmente */
-    width: 500px; /* Cambia el ancho a 500px o al valor que prefieras */
-  }
-  
-  .form-title {
-    background-color: #bfe1ff;
-    margin: 0;
-    padding: 8px;
-  }
-  
-  .form-card {
-    padding: 16px;
-    text-align: left;
-  }
-  
-  .form-group {
-    margin-bottom: 12px;
-  }
-  
-  .cardText {
-    font-weight: bold;
-  }
-  
-  .checkbox-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .card-button {
-    background-color: #bfe1ff;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 16px;
-    cursor: pointer;
-  }
-  
+  text-align: left;
+  border: 2px solid black;
+  background-color: #bfe1ff;
+  padding: 16px;
+  margin: 15px auto;
+  width: 600px;
+}
+
+.form-title {
+  background-color: #bfe1ff;
+  margin: 5;
+  padding: 8px;
+}
+
+.form-card {
+  padding: 16px;
+  text-align: left;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px; /* Añade espacio entre los campos */
+}
+
+.cardText {
+  font-weight: bold;
+  width: 30%;
+}
+
+.entry-field {
+  width: 60%;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.card-button {
+  background-color: red;
+  color: white;
+  padding: 5px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 24px;
+}
+
+.selected-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Espacio entre las opciones */
+  margin-top: 5px; /* Espacio entre las opciones y el botón de envío */
+}
+
+.selected-genre {
+  background-color: white;
+  border: 2px solid #007bff; /* Bordes azules */
+  border-radius: 5px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  margin-top: 5px; /* Espacio entre las opciones */
+}
+
+.remove-genre {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin-left: 8px;
+  color: #007bff;
+}
+.entry-field-description {
+  width: 60%; /* Ancho del campo de entrada para la descripción */
+  min-width: 300px; /* Establece un ancho mínimo de 300px */
+  min-height: 80px; /* Altura mínima del campo de entrada */
+}

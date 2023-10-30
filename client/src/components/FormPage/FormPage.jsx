@@ -25,13 +25,13 @@ function FormPage(props) {
   }
 
   const handleGenreChange = (genre) => {
-    const updatedGenres = [...formData.Genders];
-    if (updatedGenres.includes(genre)) {
-      const genreIndex = updatedGenres.indexOf(genre);
-      updatedGenres.splice(genreIndex, 1);
-    } else {
-      updatedGenres.push(genre);
+    if (!formData.Genders.includes(genre)) {
+      setFormData({ ...formData, Genders: [...formData.Genders, genre] });
     }
+  }
+
+  const removeGenre = (genre) => {
+    const updatedGenres = formData.Genders.filter((g) => g !== genre);
     setFormData({ ...formData, Genders: updatedGenres });
   }
 
@@ -108,6 +108,7 @@ function FormPage(props) {
             name="description"
             value={formData.description}
             onChange={handleInputChange}
+            className={styles['entry-field-description']} // Agrega esta línea
           />
         </div>
 
@@ -153,23 +154,37 @@ function FormPage(props) {
 
         <div className={styles['form-group']}>
           <label className={styles.cardText}>Género:</label>
-          {genreOptions.map((genre) => (
-            <label key={genre}>
-              <input
-                type="checkbox"
-                name="Genders"
-                value={genre}
-                checked={formData.Genders.includes(genre)}
-                onChange={() => handleGenreChange(genre)}
-              />
-              {genre}
-            </label>
-          ))}
+          <select
+            value=""
+            onChange={(e) => handleGenreChange(e.target.value)}
+          >
+            <option value="" disabled hidden>Seleccione un género</option>
+            {genreOptions.map((genre) => (
+              <option key={genre} value={genre}>
+                {genre}
+              </option>
+            ))}
+          </select>
+          <div className={styles['selected-genres']}>
+            {formData.Genders.map((genre) => (
+              <div key={genre} className={styles['selected-genre']}>
+                {genre}
+                <button
+                  className={styles['remove-genre']}
+                  onClick={() => removeGenre(genre)}
+                >
+                  X
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <button type="submit" className={styles['card-button']}>
-          Crear Videojuego
-        </button>
+        <div className={styles['form-group']}>
+          <button type="submit" className={styles['card-button']}>
+            Crear Videojuego
+          </button>
+        </div>
       </form>
     </div>
   );
