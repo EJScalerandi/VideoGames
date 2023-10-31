@@ -1,18 +1,17 @@
-// HomePage.js
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import {
-  setSearchGame,
+  setSearchedGame,
   setGameNotFound,
   setAllGames,
   setSelectedGenre,
   setSelectedOrigin,
   setGenreOptions,
 } from '../../Redux/actions';
-import Card from '../Card/Card';
 import Cards from '../Cards/Cards';
 import { Link } from 'react-router-dom';
+import SearchBar from '../SearchBar/SearchBar';
 import styles from './HomePage.module.css';
 
 function HomePage(props) {
@@ -24,7 +23,8 @@ function HomePage(props) {
     setAllGames,
     setSelectedGenre,
     setSelectedOrigin,
-    setGenreOptions,
+    setSearchedGame,
+    searchedGame
   } = props;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -41,20 +41,26 @@ function HomePage(props) {
       (game.genders &&
         game.genders.some((gender) => gender.name === selectedGenre));
 
-        const originMatch =
-        selectedGenre
-          ? true
-          : selectedOrigin === 'API'
-          ? isAPIGame(game)
-          : selectedOrigin === 'Base de Datos'
-          ? isDatabaseGame(game)
-          : true;
-      
+    const originMatch =
+      !selectedOrigin ||
+      selectedOrigin === 'Todos' ||
+      (selectedOrigin === 'API' && isAPIGame(game)) ||
+      (selectedOrigin === 'Base de Datos' && isDatabaseGame(game));
 
     return genreMatch && originMatch;
   });
+console.log("ESTOY EN EL HOME PAGE",searchedGame)
+  const [searchGame, setSearchGame] = useState('');
 
-  const totalGames = filteredGames.length;
+  let filteredGamesWithSearch = filteredGames;
+
+  if (searchGame.trim() !== '') {
+    filteredGamesWithSearch = filteredGames.filter((game) =>
+      game.name.toLowerCase().includes(searchGame.toLowerCase())
+    );
+  }
+
+  const totalGames = filteredGamesWithSearch.length;
   const totalPages = Math.ceil(totalGames / gamesPerPage);
 
   const handlePageChange = (pageNumber) => {
@@ -64,12 +70,12 @@ function HomePage(props) {
   const getPageGames = () => {
     const indexOfLastGame = currentPage * gamesPerPage;
     const indexOfFirstGame = indexOfLastGame - gamesPerPage;
-    return filteredGames.slice(indexOfFirstGame, indexOfLastGame);
+    return filteredGamesWithSearch.slice(indexOfFirstGame, indexOfLastGame);
   };
 
   useEffect(() => {
-    // Realiza la solicitud para obtener los juegos
-    axios.get('http://localhost:3001/videogames')
+    axios
+      .get('http://localhost:3001/videogames')
       .then((response) => {
         const data = response.data;
         setAllGames(data);
@@ -80,17 +86,19 @@ function HomePage(props) {
   }, [setAllGames]);
 
   useEffect(() => {
-    setCurrentPage(1); // Restablece la página actual a 1 cuando se cambian los filtros
+    setCurrentPage(1);
   }, [selectedGenre, selectedOrigin]);
 
   return (
     <div className={styles.homePage}>
       <h1 className={styles.pageTitle}>GamesConsult</h1>
-
       <div className={styles.buttonContainer}>
         <Link to="/formpage">
           <button className={styles.createButton}>Crear un videojuego</button>
         </Link>
+      </div>
+      <div className={styles.filterContainer}>
+        <SearchBar searchGame={searchGame} setSearchGame={setSearchGame} />
       </div>
       <div className={styles.filterContainer}>
         <h2 className={styles.filterTitle}>Filtrar por Género:</h2>
@@ -121,9 +129,9 @@ function HomePage(props) {
       </div>
       <div>
         <h2>Lista de Juegos</h2>
-        {Array.isArray(filteredGames) && filteredGames.length > 0 ? (
+        {Array.isArray(filteredGamesWithSearch) && filteredGamesWithSearch.length > 0 ? (
           <>
-            <Cards currentPageGames={getPageGames()} />
+            <Cards allGames={allGames} currentPageGames={getPageGames()} searchedGame={searchGame} />
             <ul className={styles.pagination}>
               {Array.from({ length: totalPages }).map((_, index) => (
                 <li
@@ -155,11 +163,13 @@ const mapStateToProps = (state) => ({
   selectedGenre: state.selectedGenre,
   selectedOrigin: state.selectedOrigin,
   genreOptions: state.genreOptions,
+  searchedGame: state.searchedGame, // Agregado para mantener consistencia
 });
 
 export default connect(mapStateToProps, {
   setAllGames,
   setSelectedGenre,
   setSelectedOrigin,
+  setSearchedGame,
   setGenreOptions,
 })(HomePage);

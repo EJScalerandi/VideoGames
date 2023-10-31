@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Videogame } = require('../db');
+const { Videogame, Gender } = require('../db');
 const axios = require('axios');
 require('dotenv').config();
 const { API_KEY } = process.env;
@@ -23,14 +23,19 @@ const getVideoGamesByName = async (req, res) => {
         },
       },
       limit: 15,
+      include: {
+        model: Gender,
+        as: 'genders',
+        attributes: ['name'],
+        through: 'videogame_activity',
+      },
     });
-    console.log("buscado en bdd", databaseVideogames);
 
     // Busca en la API
     const apiUrl = `https://api.rawg.io/api/games?key=${API_KEY}&search=${encodeURIComponent(lowerCaseName)}`;
     const response = await axios.get(apiUrl);
     const apiVideogames = response.data.results.slice(0, 15);
-    console.log("buscado en api", apiVideogames);
+
     if (databaseVideogames.length === 0 && apiVideogames.length === 0) {
       return res.status(404).json({ message: 'No se encontraron videojuegos con ese nombre.' });
     }

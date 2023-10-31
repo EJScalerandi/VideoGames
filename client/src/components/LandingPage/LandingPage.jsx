@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import fondo from '../../fondo.jpg';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { setAllGames } from '../../Redux/actions';
-import axios from 'axios';
+import fondo from '../../fondo.jpg';
 
-function LandingPage(props) {
+function LandingPage() {
   const backgroundStyle = {
     backgroundImage: `url(${fondo})`,
     backgroundSize: 'cover',
@@ -29,19 +26,6 @@ function LandingPage(props) {
     fontSize: '36px',
   };
 
-  useEffect(() => {
-    // Realiza la solicitud para obtener los juegos
-    axios
-      .get('http://localhost:3001/videogames')
-      .then((response) => {
-        const data = response.data;
-        props.setAllGames(data); // Almacena los juegos en el store
-      })
-      .catch((error) => {
-        console.error('Error al obtener los juegos:', error);
-      });
-  }, [props.setAllGames]);
-
   return (
     <div className="landing-page" style={backgroundStyle}>
       <Link to="/home">
@@ -51,8 +35,4 @@ function LandingPage(props) {
   );
 }
 
-const mapDispatchToProps = {
-  setAllGames,
-};
-
-export default connect(null, mapDispatchToProps)(LandingPage);
+export default LandingPage;

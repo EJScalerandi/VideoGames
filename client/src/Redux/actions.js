@@ -10,19 +10,24 @@ export const SET_SELECTED_ORIGIN = 'SET_SELECTED_ORIGIN';
 export const SET_GENRE_OPTIONS = 'SET_GENRE_OPTIONS';
 
 
-export const setSearchGame = (searchedGame) => 
-    {const endpoint = `http://localhost:3001/videogames/${searchedGame}`;
-    return async (dispatch) => {
-      try {
-        const { data } = await axios.get(endpoint);
-        return dispatch({
-          type: SET_SEARCHED_GAME,
-          payload: data,
-        });
-      } catch (error) {
-         }
-    }};
-  
+export const setSearchedGame = (searchedGame) => {
+  const endpoint = `http://localhost:3001/videogames/${searchedGame}`;
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      // Actualiza el estado usando la respuesta de la solicitud
+      dispatch({
+        type: SET_SEARCHED_GAME,
+        payload: data,
+      });
+      return data; // Devuelve los datos para poder verificar el tipo de respuesta
+    } catch (error) {
+      console.error('Error al buscar el juego:', error);
+      throw error; // Lanza el error para poder manejarlo en el componente si es necesario
+    }
+  };
+};
+
 
 export const setGameNotFound = (gameNotFound) => ({
   type: SET_GAME_NOT_FOUND,
