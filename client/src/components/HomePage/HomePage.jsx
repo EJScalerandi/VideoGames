@@ -8,6 +8,8 @@ import {
   setSelectedGenre,
   setSelectedOrigin,
   setGenreOptions,
+  sortGamesByName,
+  sortGamesByRating,
 } from '../../Redux/actions';
 import Cards from '../Cards/Cards';
 import { Link } from 'react-router-dom';
@@ -24,7 +26,10 @@ function HomePage(props) {
     setSelectedGenre,
     setSelectedOrigin,
     setSearchedGame,
-    searchedGame
+    searchedGame,
+    sortOrder,
+    sortGamesByName,
+    sortGamesByRating,
   } = props;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -49,7 +54,7 @@ function HomePage(props) {
 
     return genreMatch && originMatch;
   });
-console.log("ESTOY EN EL HOME PAGE",searchedGame)
+
   const [searchGame, setSearchGame] = useState('');
 
   let filteredGamesWithSearch = filteredGames;
@@ -67,65 +72,119 @@ console.log("ESTOY EN EL HOME PAGE",searchedGame)
     setCurrentPage(pageNumber);
   };
 
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/videogames')
+      .then((response) => {
+        let data = response.data;
+
+        if (sortOrder === 'asc') {
+          data = data.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sortOrder === 'desc') {
+          data = data.sort((a, b) => b.name.localeCompare(a.name));
+        } else if (sortOrder === 'ratingAsc') {
+          data = data.sort((a, b) => a.rating - b.rating);
+        } else if (sortOrder === 'ratingDesc') {
+          data = data.sort((a, b) => b.rating - a.rating);
+        }
+
+        setAllGames(data);
+      })
+      .catch((error) => {
+        console.error('Error al obtener los juegos:', error);
+      });
+  }, [setAllGames, sortOrder]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedGenre, selectedOrigin]);
+
+  const handleResetFilters = () => {
+    setSearchGame('');
+    setSelectedGenre('');
+    setSelectedOrigin('');
+
+    if (searchedGame && searchedGame.length > 0) {
+      window.location.reload();
+    } else {
+      sortGamesByName('asc');
+    }
+  };
+
   const getPageGames = () => {
     const indexOfLastGame = currentPage * gamesPerPage;
     const indexOfFirstGame = indexOfLastGame - gamesPerPage;
     return filteredGamesWithSearch.slice(indexOfFirstGame, indexOfLastGame);
   };
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:3001/videogames')
-      .then((response) => {
-        const data = response.data;
-        setAllGames(data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener los juegos:', error);
-      });
-  }, [setAllGames]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [selectedGenre, selectedOrigin]);
-
   return (
     <div className={styles.homePage}>
-      <h1 className={styles.pageTitle}>GamesConsult</h1>
+      <h1 className={styles.gameConsultTitle}>GamesConsult</h1>
       <div className={styles.buttonContainer}>
-        <Link to="/formpage">
-          <button className={styles.createButton}>Crear un videojuego</button>
-        </Link>
+        <div>
+          <button className={styles.buttonSmall} onClick={handleResetFilters}>Limpiar Filtros</button>
+        </div>
+        <div>
+          <Link to="/formpage">
+            <button className={styles.createButton}>Crear un videojuego</button>
+          </Link>
+        </div>
+      </div>
+      <div className={styles.filtersWrapper}>
+        <div className={styles.filtersGroup}>
+          <div className={styles.filterContainer}>
+            <h2 className={styles.filterTitle}>Filtrar por Género:</h2>
+            <select
+              className={`${styles.select} ${styles.sortSelect}`}
+              value={selectedGenre}
+              onChange={(e) => setSelectedGenre(e.target.value)}
+            >
+              <option value="">Todos</option>
+              {genreOptions.map((genre) => (
+                <option key={genre} value={genre}>
+                  {genre}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.filterContainer}>
+            <h2 className={styles.filterTitle}>Filtrar por Origen:</h2>
+            <select
+              className={`${styles.select} ${styles.sortSelect}`}
+              value={selectedOrigin}
+              onChange={(e) => setSelectedOrigin(e.target.value)}
+            >
+              <option value="Todos">Todos</option>
+              <option value="API">API</option>
+              <option value="Base de Datos">Base de Datos</option>
+            </select>
+          </div>
+        </div>
+        <div className={styles.filtersGroup}>
+          <div className={styles.filterContainer}>
+            <h2 className={styles.filterTitle}>Filtrar por Alfabeto:</h2>
+            <select
+              className={`${styles.select} ${styles.sortSelect}`}
+              onChange={(e) => sortGamesByName(e.target.value)}
+            >
+              <option value="asc">Ascendente</option>
+              <option value="desc">Descendente</option>
+            </select>
+          </div>
+          <div className={styles.filterContainer}>
+            <h2 className={styles.filterTitle}>Filtrar por Rating:</h2>
+            <select
+              className={`${styles.select} ${styles.sortSelect}`}
+              onChange={(e) => sortGamesByRating(e.target.value)}
+            >
+              <option value="ratingAsc">Ascendente</option>
+              <option value="ratingDesc">Descendente</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div className={styles.filterContainer}>
         <SearchBar searchGame={searchGame} setSearchGame={setSearchGame} />
-      </div>
-      <div className={styles.filterContainer}>
-        <h2 className={styles.filterTitle}>Filtrar por Género:</h2>
-        <select
-          className={styles.select}
-          value={selectedGenre}
-          onChange={(e) => setSelectedGenre(e.target.value)}
-        >
-          <option value="">Todos</option>
-          {genreOptions.map((genre) => (
-            <option key={genre} value={genre}>
-              {genre}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className={styles.filterContainer}>
-        <h2 className={styles.filterTitle}>Filtrar por Origen:</h2>
-        <select
-          className={styles.select}
-          value={selectedOrigin}
-          onChange={(e) => setSelectedOrigin(e.target.value)}
-        >
-          <option value="Todos">Todos</option>
-          <option value="API">API</option>
-          <option value="Base de Datos">Base de Datos</option>
-        </select>
       </div>
       <div>
         <h2>Lista de Juegos</h2>
@@ -138,8 +197,8 @@ console.log("ESTOY EN EL HOME PAGE",searchedGame)
                   key={index}
                   className={`${styles.pageItem} ${
                     index + 1 === currentPage ? styles.activePage : ''
-                  }`}
-                >
+                  }`
+                }>
                   <button
                     className={styles.pageLink}
                     onClick={() => handlePageChange(index + 1)}
@@ -163,7 +222,8 @@ const mapStateToProps = (state) => ({
   selectedGenre: state.selectedGenre,
   selectedOrigin: state.selectedOrigin,
   genreOptions: state.genreOptions,
-  searchedGame: state.searchedGame, // Agregado para mantener consistencia
+  searchedGame: state.searchedGame,
+  sortOrder: state.sortOrder,
 });
 
 export default connect(mapStateToProps, {
@@ -172,4 +232,6 @@ export default connect(mapStateToProps, {
   setSelectedOrigin,
   setSearchedGame,
   setGenreOptions,
+  sortGamesByName,
+  sortGamesByRating,
 })(HomePage);

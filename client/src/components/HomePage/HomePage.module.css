@@ -1,75 +1,124 @@
+/* Agrega estos estilos a tu archivo 'HomePage.module.css' */
+
 .homePage {
-    background: linear-gradient(to bottom, #0077b6, #0099b5);
-    color: red;
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .pageTitle {
-    font-size: 48px;
-    margin: 0;
-    padding: 10px;
-  }
-  
-  .buttonContainer {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .createButton {
-    background-color: red;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 24px;
-  }
-  
-  .filterContainer {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  .filterTitle {
-    margin: 0;
-    margin-right: 10px;
-    font-size: 20px;
-  }
-  
-  .select {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid red;
-    border-radius: 5px;
-  }
-  
-  .pagination {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  
-  .pageItem {
-    margin: 0 5px;
-  }
-  
-  .pageLink {
-    background-color: red;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .activePage {
-    background-color: #0099b5;
-    color: white;
-  }
-  
+  background: linear-gradient(to bottom, #0077b6, #dadbdc);
+  color: rgb(27, 27, 27);
+  text-align: center;
+  padding: 20px;
+  border-width: 5%;
+}
+
+.pageTitle {
+  font-size: 48px;
+  margin: 0;
+  padding: 10px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between; /* Cambiado a 'space-between' para alinear los botones a los lados */
+  margin-top: 20px;
+}
+
+.createButton {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.filterTitle {
+  margin: 0;
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid red;
+  border-radius: 5px;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pageItem {
+  margin: 0 5px;
+}
+
+.pageLink {
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.activePage {
+  background-color: #0099b5;
+  color: white;
+}
+
+.sortSelect {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid red;
+  border-radius: 5px;
+  /* Agrega cualquier otro estilo que desees para los filtros de ordenamiento */
+}
+
+.filtersWrapper {
+  display: flex;
+  justify-content: space-between;
+  border: 3px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.filtersGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonSmall {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Agrega cualquier otro estilo adicional que desees para los filtros */
+
+/* Agrega estos estilos a tu archivo 'HomePage.module.css' */
+/* Modifica los estilos en tu archivo 'HomePage.module.css' */
+/* Modifica los estilos en tu archivo 'HomePage.module.css' */
+.gameConsultTitle {
+  background-color: black; /* Fondo en negro */
+  color: red; /* Texto en rojo */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 20px; /* Aumenta el espacio interno para hacerlo más alto */
+  width: 50%; /* Establece el ancho al 50% del contenedor */
+  text-align: center; /* Alinea el texto al centro horizontalmente */
+  margin: 0 auto; /* Centra horizontalmente dentro de su contenedor */
+}

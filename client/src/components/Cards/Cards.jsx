@@ -6,8 +6,7 @@ import styles from './Cards.module.css';
 
 function Cards({ currentPageGames }) {
   const searchedGame = useSelector((state) => state.searchedGame); // Obtiene searchedGame del estado global de Redux
-  const isSearching = searchedGame.length > 0;
-  console.log("estoy en Cards",searchedGame)
+  const isSearching = searchedGame.length > 1;
 
   return (
     <div className={styles.cardsContainer}>
@@ -18,7 +17,7 @@ function Cards({ currentPageGames }) {
           </div>
         ))
       ) : currentPageGames.map((game) => (
-        <Link to={`/detail/${game.id}`} key={game.id} className={styles.cardLink}>
+        <Link to={`/game/${game.id}`} key={game.id} className={styles.cardLink}>
           <Card game={game} /> {/* Pasa el juego como prop a Card */}
         </Link>
       ))}

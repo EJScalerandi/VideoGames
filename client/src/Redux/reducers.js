@@ -5,6 +5,8 @@ import {
   SET_SELECTED_GENRE,
   SET_SELECTED_ORIGIN,
   SET_GENRE_OPTIONS,
+  SORT_GAMES_BY_NAME,
+  SORT_GAMES_BY_RATING,
 } from './actions';
 
 const initialState = {
@@ -14,9 +16,10 @@ const initialState = {
   selectedGenre: '',
   selectedOrigin: 'Todos',
   genreOptions: [],
+  sortOrder: 'asc', // Agregamos sortOrder para controlar el ordenamiento
 };
 
-const homeReducer = (state = initialState, action) => {
+const reducers = (state = initialState, action) => {
   switch (action.type) {
     case SET_SEARCHED_GAME:
       return {
@@ -48,9 +51,19 @@ const homeReducer = (state = initialState, action) => {
         ...state,
         genreOptions: action.payload,
       };
+    case SORT_GAMES_BY_NAME:
+      return {
+        ...state,
+        sortOrder: action.payload,
+      };
+    case SORT_GAMES_BY_RATING:
+      return {
+        ...state,
+        sortOrder: action.payload,
+      };
     default:
       return state;
   }
 };
 
-export default homeReducer;
+export default reducers;

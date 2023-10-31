@@ -1,19 +1,17 @@
-/* Card.module.css */
-
 .card {
-  border: 2px solid white; /* Borde blanco */
-  border-radius: 10px; /* Bordes redondeados */
-  background-color: #bfe1ff; /* Fondo celeste claro */
+  border: 2px solid white;
+  border-radius: 10px;
+  background-color: #bfe1ff;
   padding: 16px;
-  margin: 16px; /* Ajusta el margen según tus necesidades */
+  margin: 16px;
   max-width: 300px;
   text-align: center;
 }
 
 .card img {
-  width: 7cm; /* Ancho fijo de 3 cm */
-  height: 5cm; /* Alto fijo de 5 cm */
-  max-width: 100%; /* Para asegurarse de que la imagen no se estire */
+  width: 7cm;
+  height: 5cm;
+  max-width: 100%;
 }
 
 .card h3 {
@@ -22,4 +20,26 @@
 
 .card p {
   color: #555;
+}
+
+.starRating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stars {
+  display: flex;
+  gap: 15px;
+  font-size: 35px;
+}
+
+.filledStar {
+  color: yellow;
+  text-decoration: none; /* Quitar el subrayado azul en las estrellas */
+}
+
+.emptyStar {
+  color: rgba(255, 255, 255, 0.953);
+  text-decoration: none; /* Quitar el subrayado azul en las estrellas */
 }
