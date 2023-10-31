@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { setGenreOptions } from '../../Redux/actions';
 import axios from 'axios';
@@ -36,11 +36,11 @@ function FormPage(props) {
   }
 
   const isValidURL = (url) => {
-    return true;
+    return true; // Implementa tu lógica de validación de URL
   }
 
   const isValidDate = (date) => {
-    return true;
+    return true; // Implementa tu lógica de validación de fecha
   }
 
   const handleSubmit = (e) => {
@@ -81,6 +81,12 @@ function FormPage(props) {
       .then((response) => {
         console.log('Videojuego creado:', response.data);
         setSuccessMessage('El juego se creó exitosamente.');
+
+        // Mostrar una ventana emergente con el mensaje de éxito
+        window.alert('El juego se creó exitosamente.');
+
+        // Redirigir al usuario al "home" u otra página después de aceptar el mensaje
+        window.location.href = 'http://localhost:3000/home/'; // Reemplaza '/' con la URL de tu página principal
       })
       .catch((error) => {
         console.error('Error al crear el videojuego:', error);
@@ -195,3 +201,4 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(FormPage);
+

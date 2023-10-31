@@ -187,7 +187,7 @@ function HomePage(props) {
         <SearchBar searchGame={searchGame} setSearchGame={setSearchGame} />
       </div>
       <div>
-        <h2>Lista de Juegos</h2>
+        <h2 className={styles.pageTitle}>Lista de Juegos</h2>
         {Array.isArray(filteredGamesWithSearch) && filteredGamesWithSearch.length > 0 ? (
           <>
             <Cards allGames={allGames} currentPageGames={getPageGames()} searchedGame={searchGame} />

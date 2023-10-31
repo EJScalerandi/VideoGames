@@ -1,23 +1,29 @@
 /* Agrega estos estilos a tu archivo 'HomePage.module.css' */
 
 .homePage {
-  background: linear-gradient(to bottom, #0077b6, #dadbdc);
-  color: rgb(27, 27, 27);
+  color: rgb(255, 255, 255);
   text-align: center;
   padding: 20px;
   border-width: 5%;
-}
+  }
 
 .pageTitle {
-  font-size: 48px;
+  color:rgb(255, 255, 255);
+  background-color: rgba(40, 18, 209, 0.756);
   margin: 0;
   padding: 10px;
+  font-size: 45px;
+  width: 50%;
+  text-align: center; 
+  margin: 0 auto;
+  border-radius: 10px; /* Bordes redondeados */
+  border: 6px solid black;
 }
 
 .buttonContainer {
   display: flex;
   justify-content: space-between; /* Cambiado a 'space-between' para alinear los botones a los lados */
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
 .createButton {
@@ -27,19 +33,20 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 25px;
 }
 
 .filterContainer {
   display: flex;
   align-items: center;
   margin-top: 10px;
+  font-size: 45px;
 }
 
 .filterTitle {
   margin: 0;
   margin-right: 10px;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .select {
@@ -87,10 +94,12 @@
 .filtersWrapper {
   display: flex;
   justify-content: space-between;
-  border: 3px solid black;
+  border: 6px solid black;
   border-radius: 10px;
   padding: 10px;
   margin-top: 10px;
+  color:rgb(255, 255, 255);
+  background-color: rgba(40, 18, 209, 0.756);
 }
 
 .filtersGroup {
@@ -105,7 +114,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 25px;
 }
 
 /* Agrega cualquier otro estilo adicional que desees para los filtros */
@@ -114,11 +123,13 @@
 /* Modifica los estilos en tu archivo 'HomePage.module.css' */
 /* Modifica los estilos en tu archivo 'HomePage.module.css' */
 .gameConsultTitle {
-  background-color: black; /* Fondo en negro */
-  color: red; /* Texto en rojo */
+ color:rgb(255, 255, 255);
+  background-color: rgba(40, 18, 209, 0.756);
   border-radius: 10px; /* Bordes redondeados */
   padding: 20px; /* Aumenta el espacio interno para hacerlo más alto */
   width: 50%; /* Establece el ancho al 50% del contenedor */
   text-align: center; /* Alinea el texto al centro horizontalmente */
   margin: 0 auto; /* Centra horizontalmente dentro de su contenedor */
+  font-size: 85px;
+  border: 6px solid black;
 }

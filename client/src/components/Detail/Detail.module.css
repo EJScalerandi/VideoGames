@@ -3,7 +3,7 @@
 .detailsContainer {
     border: 2px solid white; /* Borde blanco */
     border-radius: 10px; /* Bordes redondeados */
-    background-color: #bfe1ff; /* Fondo celeste claro */
+    background-color: #bfe1ff47; /* Fondo celeste claro */
     padding: 16px;
     margin: 16px; /* Ajusta el margen según tus necesidades */
     text-align: center;
@@ -61,8 +61,8 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    margin-top:10px;
-    margin-right: 10px; /* Modifica esto según tus necesidades */
-    font-size: 36px;
+    margin-top:5px;
+    margin-right: 1px; /* Modifica esto según tus necesidades */
+    font-size: 30px;
   }
   

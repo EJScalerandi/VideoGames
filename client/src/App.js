@@ -15,12 +15,14 @@ function App(props) {
   }, [props.setGenreOptions]);
 
   return (
+    <div className= "appBackground">
     <Routes>
       <Route path="/home" element={<HomePage />} />
       <Route path="/FormPage" element={<FormPage />} />
       <Route exact path="/" element={<LandingPage />} />
       <Route path="/game/:id" element={<Detail />} />
     </Routes>
+    </div>
   );
 }
 

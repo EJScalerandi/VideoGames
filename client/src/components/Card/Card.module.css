@@ -36,10 +36,17 @@
 
 .filledStar {
   color: yellow;
-  text-decoration: none; /* Quitar el subrayado azul en las estrellas */
+  text-decoration: none; 
 }
 
 .emptyStar {
   color: rgba(255, 255, 255, 0.953);
-  text-decoration: none; /* Quitar el subrayado azul en las estrellas */
+  text-decoration: none; 
 }
+
+.linkwithoutunderline {
+  text-decoration: none;
+}
+
+a, .stars {
+  text-decoration: none;}
