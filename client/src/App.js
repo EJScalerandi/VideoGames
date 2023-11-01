@@ -5,14 +5,18 @@ import HomePage from './components/HomePage/HomePage';
 import FormPage from './components/FormPage/FormPage';
 import Detail from './components/Detail/Detail';
 import LandingPage from './components/LandingPage/LandingPage';
-import { setGenreOptions } from './Redux/actions'; // Importa setGenreOptions
-import { connect } from 'react-redux'; // Importa connect
+import { setGenreOptions, setAllVideogames } from './Redux/actions'; 
+import { connect } from 'react-redux'; 
 
-function App(props) {
+
+
+function App(props) { // en esta parte mando dispatch a action para que los estados de generos y videogames hagan la peticion
   useEffect(() => {
-    // Realiza la llamada a setGenreOptions solo una vez cuando se carga la aplicación
     props.setGenreOptions();
   }, [props.setGenreOptions]);
+  useEffect(() => {
+    props.setAllVideogames();
+  }, [props.setAllVideogames]);
 
   return (
     <div className= "appBackground">
@@ -28,6 +32,7 @@ function App(props) {
 
 const mapDispatchToProps = {
   setGenreOptions,
+  setAllVideogames,
 };
 
 export default connect(null, mapDispatchToProps)(App);

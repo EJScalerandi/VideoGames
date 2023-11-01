@@ -17,7 +17,7 @@ const getAllVideogames = async (req, res) => {
    
 
     // Obtener videojuegos de la API
-    const maxGames = 10;
+    const maxGames = 100;
     const apiUrl = `https://api.rawg.io/api/games?key=${API_KEY}`;
     let allVideogames = [...databaseVideogames];
     let page = 1;

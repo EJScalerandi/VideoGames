@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import {
   setSearchedGame,
-  setGameNotFound,
   setAllGames,
   setSelectedGenre,
   setSelectedOrigin,
@@ -15,9 +14,9 @@ import Cards from '../Cards/Cards';
 import { Link } from 'react-router-dom';
 import SearchBar from '../SearchBar/SearchBar';
 import styles from './HomePage.module.css';
-
 import image1 from '../../Carga1.jpg'; 
 import image2 from '../../Carga2.jpg';
+import image3 from "../../Carga3.jpg";
 
 function HomePage(props) {
   const {
@@ -76,11 +75,7 @@ function HomePage(props) {
   };
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/videogames')
-      .then((response) => {
-        let data = response.data;
-
+        let data = allGames;
         if (sortOrder === 'asc') {
           data = data.sort((a, b) => a.name.localeCompare(b.name));
         } else if (sortOrder === 'desc') {
@@ -92,10 +87,6 @@ function HomePage(props) {
         }
 
         setAllGames(data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener los juegos:', error);
-      });
   }, [setAllGames, sortOrder]);
 
   useEffect(() => {
@@ -120,9 +111,9 @@ function HomePage(props) {
     return filteredGamesWithSearch.slice(indexOfFirstGame, indexOfLastGame);
   };
 
-  // Agregar funcionalidad de alternar imágenes
+ 
   const [currentImage, setCurrentImage] = useState(0);
-  const images = [image1, image2];
+  const images = [image1, image2, image3];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -226,9 +217,11 @@ function HomePage(props) {
             </ul>
           </>
         ) : (
+          <div>
         <img src={images[currentImage]} alt="Carga" className={styles.imageLoading} />
+        <h2>Espera a que cargue........., o te las veras conmigo</h2>
+      </div>
         )}
-        <h2>Espera a que cargue........., o te las veras con nosotros</h2>
       </div>
     </div>
   );

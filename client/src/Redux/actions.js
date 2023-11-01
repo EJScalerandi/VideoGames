@@ -35,16 +35,32 @@ export const setSearchedGame = (searchedGame) => {
   };
 };
 
-export const setGameNotFound = (gameNotFound) => ({
-  type: SET_GAME_NOT_FOUND,
-  payload: gameNotFound,
-});
-
+  
+export const setAllVideogames = (dispatch) => {
+const UrlAllVideogames = "http://localhost:3001/videogames/";
+  return async (dispatch) => {
+  try {
+    const { data } = await axios.get(UrlAllVideogames);
+    dispatch({
+      type: SET_ALL_GAMES,
+      payload: data,
+    });
+    return data; // Devuelve los datos para poder verificar el tipo de respuesta
+  } catch (error) {
+    console.error('Error al obtener los videojuegos:', error);
+    throw error; // Lanza el error para poder manejarlo en el componente si es necesario
+  };
+};
+};
 export const setAllGames = (allGames) => ({
   type: SET_ALL_GAMES,
   payload: allGames,
 });
 
+export const setGameNotFound = (gameNotFound) => ({
+  type: SET_GAME_NOT_FOUND,
+  payload: gameNotFound,
+});
 export const setSelectedGenre = (selectedGenre) => ({
   type: SET_SELECTED_GENRE,
   payload: selectedGenre,
