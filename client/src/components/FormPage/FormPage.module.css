@@ -1,4 +1,4 @@
-/* FormPage.module.css */
+
 
 .form-container {
   text-align: left;
@@ -24,7 +24,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px; /* Añade espacio entre los campos */
+  margin-bottom: 12px; 
 }
 
 .cardText {
@@ -32,14 +32,14 @@
   width: 30%;
 }
 
-.entry-field {
+entry-field {
   width: 60%;
 }
 
-.checkbox-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.entry-field-description {
+  width: 60%; 
+  min-width: 300px; 
+  min-height: 80px; 
 }
 
 .card-button {
@@ -56,18 +56,18 @@
 .selected-genres {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px; /* Espacio entre las opciones */
-  margin-top: 5px; /* Espacio entre las opciones y el botón de envío */
+  gap: 8px; 
+  margin-top: 5px; 
 }
 
 .selected-genre {
   background-color: white;
-  border: 2px solid #007bff; /* Bordes azules */
+  border: 2px solid #007bff; 
   border-radius: 5px;
   padding: 5px 10px;
   display: flex;
   align-items: center;
-  margin-top: 5px; /* Espacio entre las opciones */
+  margin-top: 5px; 
 }
 
 .remove-genre {
@@ -78,8 +78,18 @@
   margin-left: 8px;
   color: #007bff;
 }
-.entry-field-description {
-  width: 60%; /* Ancho del campo de entrada para la descripción */
-  min-width: 300px; /* Establece un ancho mínimo de 300px */
-  min-height: 80px; /* Altura mínima del campo de entrada */
+
+
+
+.homeLink { 
+  background-color: red;
+  color: white;
+  padding: 5px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 22px;
+
 }
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import fondo from '../../fondo.jpg';
+import fondo from '../../assets/fondo.jpg';
 
 function LandingPage() {
   const backgroundStyle = {

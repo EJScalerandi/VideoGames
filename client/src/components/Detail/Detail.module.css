@@ -1,58 +1,57 @@
-/* Detail.module.css */
+
 
 .detailsContainer {
-    border: 2px solid white; /* Borde blanco */
-    border-radius: 10px; /* Bordes redondeados */
-    background-color: #bfe1ff47; /* Fondo celeste claro */
+    border: 2px solid white; 
+    border-radius: 10px; 
+    background-color: #bfe1ff47; 
     padding: 16px;
-    margin: 16px; /* Ajusta el margen según tus necesidades */
+    margin: 16px; 
     text-align: center;
   }
   
   .gameTitle {
-    border: 2px solid white; /* Borde blanco para el título */
-    border-radius: 10px; /* Bordes redondeados */
-    background-color: #1a73e8; /* Fondo azul oscuro */
+    border: 2px solid white; 
+    border-radius: 10px; 
+    background-color: #1a73e8; 
     padding: 8px;
     margin: 0;
   }
   
   .gameTitle h1 {
-    color: white; /* Texto blanco para el título */
     margin: 0;
   }
   
   .description {
-    border: 2px solid white; /* Borde blanco para la descripción */
-    border-radius: 10px; /* Bordes redondeados */
-    background-color: #bfe1ff; /* Fondo celeste claro */
+    border: 2px solid white; 
+    border-radius: 10px;
+    background-color: #bfe1ff; 
     padding: 16px;
     text-align: left;
   }
   
   .gameImage {
-    width: 40cm; /* Ancho fijo de 10 cm */
-    height: 20cm; /* Alto fijo de 10 cm */
-    max-width: 100%; /* Para asegurarse de que la imagen no se estire */
-    border: 2px solid white; /* Borde blanco para la imagen */
-    border-radius: 10px; /* Bordes redondeados */
+    width: 40cm; 
+    height: 20cm; 
+    max-width: 100%; 
+    border: 2px solid white; 
+    border-radius: 10px; 
   }
   
   
   
   .genres, .releaseDate, .rating {
-    border: 2px solid white; /* Borde blanco para las propiedades */
-    border-radius: 10px; /* Bordes redondeados */
-    background-color: #bfe1ff; /* Fondo celeste claro */
+    border: 2px solid white; 
+    border-radius: 10px; 
+    background-color: #bfe1ff; 
     padding: 16px;
     text-align: left;
   }
   .gameImageSize {
-    width: 40cm; /* Ancho fijo de 10 cm */
-    height: 20cm; /* Alto fijo de 10 cm */
-    max-width: 100%; /* Para asegurarse de que la imagen no se estire */
-    border: 2px solid white; /* Borde blanco para la imagen */
-    border-radius: 10px; /* Bordes redondeados */
+    width: 40cm; 
+    height: 20cm; 
+    max-width: 100%; 
+    border: 2px solid white; 
+    border-radius: 10px; 
   }
   .buttonEntryStyle {
     background-color: red;
@@ -62,7 +61,7 @@
     border-radius: 10px;
     cursor: pointer;
     margin-top:5px;
-    margin-right: 1px; /* Modifica esto según tus necesidades */
+    margin-right: 1px;
     font-size: 30px;
   }
   

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import styles from './Card.module.css';
 
 function Card({ game }) {
-  // Calcula la puntuación promedio y redondea al número entero más cercano
+
   const averageRating = Math.round(game.rating);
 
-  // Genera un array de 5 elementos, donde los primeros "averageRating" elementos son 1 (estrellas llenas) y el resto son 0 (estrellas vacías)
+
   const starsArray = Array(5).fill(0).map((_, index) => (index < averageRating ? 1 : 0));
 
   return (
@@ -34,8 +34,7 @@ function Card({ game }) {
       <p>
         Género: {game.genres ? game.genres.map((genre) => genre.name).join(', ') : game.genders.map((gender) => gender.name).join(', ')}
       </p>
-      {/* Agrega el resto de los detalles aquí */}
-    </div>
+     </div>
   );
 }
 

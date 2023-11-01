@@ -8,7 +8,7 @@ const getVideogamesByUUID = async (req, res) => {
       include: [
         {
           model: Gender,
-          as: 'genders', // Especifica el alias 'genders' aquí
+          as: 'genders', // Especifica el alias 'genders' 
           attributes: ['id', 'name'],
         },
       ],

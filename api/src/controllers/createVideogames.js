@@ -10,10 +10,10 @@ const createVideogames = async (req, res) => {
       image,
       releaseDate,
       rating,
-      Genders, // Un arreglo con los nombres de géneros seleccionados
+      Genders,
     } = req.body;
 
-    // Crea el videojuego en la base de datos
+  
     const newVideogame = await Videogame.create({
       name,
       description,
@@ -22,35 +22,27 @@ const createVideogames = async (req, res) => {
       releaseDate,
       rating,
     });
-    // Establece la URL de imagen predeterminada si no se proporciona una URL
+  
     const defaultImageURL = 'https://as2.ftcdn.net/v2/jpg/05/41/24/61/1000_F_541246162_nfth7B8wvZF58fxnjku114DNL6L602QX.jpg';
     if(!newVideogame.image) {
       newVideogame.image = defaultImageURL;
       newVideogame.save();
     }
     
-    console.log('newVideogame:', newVideogame);
-
-    // Busca los géneros correspondientes en la tabla "Gender"
     if (Genders && Array.isArray(Genders)) {
       const genreRecords = await Gender.findAll({
         where: { name: Genders },
       });
 
-      console.log('genreRecords:', genreRecords);
-
-      // Asocia los géneros al nuevo videojuego en la tabla intermedia
-      await newVideogame.addGenders(genreRecords);
-
-      console.log('Videojuego con géneros asociados:', newVideogame);
+    await newVideogame.addGenders(genreRecords);
     }
 
-    // Incluye la información de género en la respuesta
+  
     const videogameWithGenres = await Videogame.findByPk(newVideogame.id, {
-      include: { model: Gender, as: 'genders' }, // Incluye información de género
+      include: { model: Gender, as: 'genders' },
     });
 
-    console.log('videogameWithGenres:', videogameWithGenres);
+
 
     res.status(201).json(videogameWithGenres);
   } catch (error) {

@@ -1,4 +1,4 @@
-/* Agrega estos estilos a tu archivo 'HomePage.module.css' */
+
 
 .homePage {
   color: rgb(255, 255, 255);
@@ -16,13 +16,13 @@
   width: 50%;
   text-align: center; 
   margin: 0 auto;
-  border-radius: 10px; /* Bordes redondeados */
+  border-radius: 10px; 
   border: 6px solid black;
 }
 
 .buttonContainer {
   display: flex;
-  justify-content: space-between; /* Cambiado a 'space-between' para alinear los botones a los lados */
+  justify-content: space-between; 
   margin-top: 25px;
 }
 
@@ -88,7 +88,7 @@
   font-size: 16px;
   border: 1px solid red;
   border-radius: 5px;
-  /* Agrega cualquier otro estilo que desees para los filtros de ordenamiento */
+
 }
 
 .filtersWrapper {
@@ -117,19 +117,15 @@
   font-size: 25px;
 }
 
-/* Agrega cualquier otro estilo adicional que desees para los filtros */
 
-/* Agrega estos estilos a tu archivo 'HomePage.module.css' */
-/* Modifica los estilos en tu archivo 'HomePage.module.css' */
-/* Modifica los estilos en tu archivo 'HomePage.module.css' */
 .gameConsultTitle {
  color:rgb(255, 255, 255);
   background-color: rgba(40, 18, 209, 0.756);
-  border-radius: 10px; /* Bordes redondeados */
-  padding: 20px; /* Aumenta el espacio interno para hacerlo más alto */
-  width: 50%; /* Establece el ancho al 50% del contenedor */
-  text-align: center; /* Alinea el texto al centro horizontalmente */
-  margin: 0 auto; /* Centra horizontalmente dentro de su contenedor */
+  border-radius: 10px; 
+  padding: 20px; 
+  width: 50%; 
+  text-align: center; 
+  margin: 0 auto; 
   font-size: 85px;
   border: 6px solid black;
 }

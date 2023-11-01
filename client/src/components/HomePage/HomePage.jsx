@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import {
-  setSearchedGame,
-  setAllGames,
-  setSelectedGenre,
-  setSelectedOrigin,
-  setGenreOptions,
-  sortGamesByName,
-  sortGamesByRating,
-} from '../../Redux/actions';
 import Cards from '../Cards/Cards';
 import { Link } from 'react-router-dom';
 import SearchBar from '../SearchBar/SearchBar';
 import styles from './HomePage.module.css';
-import image1 from '../../Carga1.jpg'; 
-import image2 from '../../Carga2.jpg';
-import image3 from "../../Carga3.jpg";
+import image1 from '../../assets/Carga1.jpg'; 
+import image2 from '../../assets/Carga2.jpg'; 
+import image3 from '../../assets/Carga3.jpg'; 
+import {
+setSearchedGame,
+setAllGames,
+setSelectedGenre,
+setSelectedOrigin,
+setGenreOptions,
+sortGamesByName,
+sortGamesByRating,
+} from '../../Redux/actions';
 
 function HomePage(props) {
   const {
@@ -27,55 +26,58 @@ function HomePage(props) {
     setAllGames,
     setSelectedGenre,
     setSelectedOrigin,
-    setSearchedGame,
     searchedGame,
     sortOrder,
     sortGamesByName,
     sortGamesByRating,
   } = props;
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const gamesPerPage = 15;
-
+  
   const isAPIGame = (game) => typeof game.id === 'number';
   const isDatabaseGame = (game) => typeof game.id === 'string';
-
+  
+  
   const filteredGames = allGames.filter((game) => {
     const genreMatch =
-      !selectedGenre ||
-      (game.genres &&
-        game.genres.some((genre) => genre.name === selectedGenre)) ||
+    !selectedGenre ||
+    (game.genres &&
+      game.genres.some((genre) => genre.name === selectedGenre)) ||
       (game.genders &&
         game.genders.some((gender) => gender.name === selectedGenre));
-
-    const originMatch =
-      !selectedOrigin ||
-      selectedOrigin === 'Todos' ||
-      (selectedOrigin === 'API' && isAPIGame(game)) ||
-      (selectedOrigin === 'Base de Datos' && isDatabaseGame(game));
-
-    return genreMatch && originMatch;
-  });
-
-  const [searchGame, setSearchGame] = useState('');
-
-  let filteredGamesWithSearch = filteredGames;
-
-  if (searchGame.trim() !== '') {
-    filteredGamesWithSearch = filteredGames.filter((game) =>
-      game.name.toLowerCase().includes(searchGame.toLowerCase())
-    );
-  }
-
-  const totalGames = filteredGamesWithSearch.length;
-  const totalPages = Math.ceil(totalGames / gamesPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  useEffect(() => {
-        let data = allGames;
+        
+     const originMatch =
+        !selectedOrigin ||
+        selectedOrigin === 'Todos' ||
+        (selectedOrigin === 'API' && isAPIGame(game)) ||
+        (selectedOrigin === 'Base de Datos' && isDatabaseGame(game));
+        
+        return genreMatch && originMatch;
+      });
+      
+      const [searchGame, setSearchGame] = useState('');
+      
+      let filteredGamesWithSearch = filteredGames;
+      
+      if (searchGame.trim() !== '') {
+        filteredGamesWithSearch = filteredGames.filter((game) =>
+        game.name.toLowerCase().includes(searchGame.toLowerCase())
+        );
+      }
+      
+      useEffect(() => {
+        if (searchedGame && searchedGame.length > 0){
+        let data = searchedGame;
+        if (sortOrder === 'asc') {
+          data = data.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sortOrder === 'desc') {
+          data = data.sort((a, b) => b.name.localeCompare(a.name));
+        } else if (sortOrder === 'ratingAsc') {
+          data = data.sort((a, b) => a.rating - b.rating);
+        } else if (sortOrder === 'ratingDesc') {
+          data = data.sort((a, b) => b.rating - a.rating);
+          setSearchedGame(data)
+        }}
+        else{
+          let data = allGames;
         if (sortOrder === 'asc') {
           data = data.sort((a, b) => a.name.localeCompare(b.name));
         } else if (sortOrder === 'desc') {
@@ -85,33 +87,33 @@ function HomePage(props) {
         } else if (sortOrder === 'ratingDesc') {
           data = data.sort((a, b) => b.rating - a.rating);
         }
+        setAllGames(data)};
+      }, [setAllGames, sortOrder, setSearchedGame]);
+      
+      
+      const handleResetFilters = () => {
+      setSearchedGame([]);
+      setSelectedGenre('');
+      setSelectedOrigin('')};
+      
+      const [currentPage, setCurrentPage] = useState(1);
+      const gamesPerPage = 15;
+      const totalGames = filteredGamesWithSearch.length;
+      const totalPages = Math.ceil(totalGames / gamesPerPage);
 
-        setAllGames(data);
-  }, [setAllGames, sortOrder]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [selectedGenre, selectedOrigin]);
-
-  const handleResetFilters = () => {
-    setSearchGame('');
-    setSelectedGenre('');
-    setSelectedOrigin('');
-
-    if (searchedGame && searchedGame.length > 0) {
-      window.location.reload();
-    } else {
-      sortGamesByName('asc');
-    }
-  };
-
-  const getPageGames = () => {
-    const indexOfLastGame = currentPage * gamesPerPage;
-    const indexOfFirstGame = indexOfLastGame - gamesPerPage;
-    return filteredGamesWithSearch.slice(indexOfFirstGame, indexOfLastGame);
-  };
-
- 
+      const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+      };
+      
+      useEffect(() => {
+        setCurrentPage(1);
+      }, [selectedGenre, selectedOrigin]);
+      const getPageGames = () => {
+        const indexOfLastGame = currentPage * gamesPerPage;
+        const indexOfFirstGame = indexOfLastGame - gamesPerPage;
+        return filteredGamesWithSearch.slice(indexOfFirstGame, indexOfLastGame);
+      };
+      
   const [currentImage, setCurrentImage] = useState(0);
   const images = [image1, image2, image3];
 
@@ -125,7 +127,7 @@ function HomePage(props) {
 
   return (
     <div className={styles.homePage}>
-      <h1 className={styles.gameConsultTitle}>GamesConsult</h1>
+      <h1 className={styles.gameConsultTitle}>PAC - MANIA</h1>
       <div className={styles.buttonContainer}>
         <div>
           <button className={styles.buttonSmall} onClick={handleResetFilters}>Limpiar Filtros</button>
@@ -190,14 +192,14 @@ function HomePage(props) {
         </div>
       </div>
       <div className={styles.filterContainer}>
-        <SearchBar searchGame={searchGame} setSearchGame={setSearchGame} />
+        <SearchBar  />
       </div>
       <div>
         <h2 className={styles.pageTitle}>Lista de Juegos</h2>
         {Array.isArray(filteredGamesWithSearch) && filteredGamesWithSearch.length > 0 ? (
           <>
           
-            <Cards allGames={allGames} currentPageGames={getPageGames()} searchedGame={searchGame} />
+            <Cards allGames={allGames} currentPageGames={getPageGames()} searchedGame={searchedGame} />
             <ul className={styles.pagination}>
               {Array.from({ length: totalPages }).map((_, index) => (
                 <li

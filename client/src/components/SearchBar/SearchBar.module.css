@@ -1,20 +1,20 @@
 .search-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Alinea los elementos al inicio y al final */
+    justify-content: space-between; 
   }
   
   .input-field {
-    flex: 3; /* La barra de entrada ocupará tres partes del espacio disponible */
+    flex: 3; 
   }
   
   .search-input {
-    width: 70%; /* Redefine el ancho de la barra de entrada para que ocupe el 70% del espacio disponible */
+    width: 70%; 
     padding: 10px;
-    font-size: 18px; /* El tamaño de la letra es 18px */
+    font-size: 18px; 
     border: none;
     border-radius: 5px;
-    margin-right: 10px; /* Agrega un margen derecho al campo de búsqueda para separarlo del botón */
+    margin-right: 10px; 
   }
   
   .buttonSmall {
@@ -25,6 +25,5 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 25px;
-    /* Quita el margen izquierdo para mantener el botón a la derecha */
   }
   

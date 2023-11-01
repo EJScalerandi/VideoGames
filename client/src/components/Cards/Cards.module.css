@@ -1,19 +1,16 @@
-/* Cards.module.css */
 
 .cardsContainer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Para que las tarjetas se ajusten horizontalmente */
+    justify-content: space-between; 
   }
   
   .cardLink {
     text-decoration: none;
     margin: 10px;
-    width: calc(33.33% - 20px); /* 33.33% para un máximo de 3 tarjetas por fila, ajusta según tus necesidades */
+    width: calc(33.33% - 20px); 
     box-sizing: border-box;
   }
-  
-  /* Estilos de las tarjetas (deja el resto de los estilos igual) */
   .card {
     background-color: #bfe1ff;
     border: 2px solid white;

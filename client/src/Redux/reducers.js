@@ -16,7 +16,7 @@ const initialState = {
   selectedGenre: '',
   selectedOrigin: 'Todos',
   genreOptions: [],
-  sortOrder: 'asc', // Agregamos sortOrder para controlar el ordenamiento
+  sortOrder: '', 
 };
 
 const reducers = (state = initialState, action) => {
@@ -25,11 +25,6 @@ const reducers = (state = initialState, action) => {
       return {
         ...state,
         searchedGame: action.payload,
-      };
-    case SET_GAME_NOT_FOUND:
-      return {
-        ...state,
-        gameNotFound: action.payload,
       };
     case SET_ALL_GAMES:
       return {

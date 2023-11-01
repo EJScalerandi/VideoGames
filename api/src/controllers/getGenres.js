@@ -13,14 +13,14 @@ const getGenres = async (req, res) => {
       const apiGenres = response.data.results;
 
       if (!apiGenres) {
-        // Si la respuesta de la API no contiene géneros, devuelve un error
+
         return res.status(500).json({ error: 'Error al obtener los géneros.' });
       }
 
-      // Obtén solo los nombres de los géneros de la API
+
       const genreNames = apiGenres.map((genre) => genre.name);
 
-      // Itera sobre los nombres de géneros y guárdalos en la base de datos
+  
       for (const name of genreNames) {
         await Gender.create({
           name,
@@ -32,10 +32,10 @@ const getGenres = async (req, res) => {
         attributes: ['name'], // Obtén solo el nombre de los géneros
       });
 
-      // Devuelve la lista de nombres de géneros en la respuesta HTTP
+     
       res.status(200).json(genresFromDatabase.map((genre) => genre.name));
     } else {
-      // Si la base de datos ya tiene géneros, devuelve la lista de nombres de géneros en la respuesta HTTP
+     
       res.status(200).json(genresInDatabase.map((genre) => genre.name));
     }
   } catch (error) {

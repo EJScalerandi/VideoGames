@@ -10,7 +10,6 @@ export const SORT_GAMES_BY_NAME = 'SORT_GAMES_BY_NAME';
 export const SORT_GAMES_BY_RATING = 'SORT_GAMES_BY_RATING';
 
 export const setSearchedGame = (searchedGame) => {
-  // Verifica si searchedGame es una cadena vacía y devuelve un array vacío como payload
   if (searchedGame === '') {
     return {
       type: SET_SEARCHED_GAME,
@@ -22,15 +21,15 @@ export const setSearchedGame = (searchedGame) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      // Actualiza el estado usando la respuesta de la solicitud
+  
       dispatch({
         type: SET_SEARCHED_GAME,
         payload: data,
       });
-      return data; // Devuelve los datos para poder verificar el tipo de respuesta
+      return data; 
     } catch (error) {
       console.error('Error al buscar el juego:', error);
-      throw error; // Lanza el error para poder manejarlo en el componente si es necesario
+      throw error; 
     }
   };
 };
@@ -45,10 +44,10 @@ const UrlAllVideogames = "http://localhost:3001/videogames/";
       type: SET_ALL_GAMES,
       payload: data,
     });
-    return data; // Devuelve los datos para poder verificar el tipo de respuesta
+    return data; 
   } catch (error) {
     console.error('Error al obtener los videojuegos:', error);
-    throw error; // Lanza el error para poder manejarlo en el componente si es necesario
+    throw error; 
   };
 };
 };

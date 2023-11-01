@@ -6,7 +6,7 @@ const { API_KEY } = process.env;
 
 const getVideoGamesByName = async (req, res) => {
   try {
-    const { name } = req.params; // Obtén el nombre de los parámetros de la ruta
+    const { name } = req.params;
  
     if (!name) {
       return res.status(400).json({ message: 'El parámetro "name" es obligatorio.' });

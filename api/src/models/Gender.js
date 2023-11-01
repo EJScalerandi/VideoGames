@@ -14,12 +14,6 @@ module.exports = (sequelize) => {
     },
   }, { timestamps: false });
 
-  // No definas la relación aquí
-  // Gender.belongsToMany(Videogame, {
-  //   through: 'Videogame_activity',
-  //   as: 'genders', // Alias para la relación
-  //   foreignKey: 'GenderId', // Nombre de la clave foránea en la tabla intermedia
-  // });
 
   return Gender;
 };

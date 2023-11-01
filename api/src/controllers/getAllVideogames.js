@@ -8,9 +8,9 @@ const getAllVideogames = async (req, res) => {
     // Obtener videojuegos de la base de datos incluyendo información de género
     const databaseVideogames = await Videogame.findAll({
       include: {
-        model: Gender, // El modelo de género
-        as: 'genders', // Especifica el alias 'genders'
-        attributes: ['name'], // Las columnas que deseas seleccionar
+        model: Gender, 
+        as: 'genders', 
+        attributes: ['name'], 
         through: 'videogame_activity', // Corrige el nombre de la tabla intermedia
       },
     });
@@ -29,7 +29,7 @@ const getAllVideogames = async (req, res) => {
   
 
       if (gamesOnPage.length === 0) {
-        break; // No more games available
+        break;
       }
 
       // Calcular cuántos juegos podemos obtener de esta página sin superar el límite

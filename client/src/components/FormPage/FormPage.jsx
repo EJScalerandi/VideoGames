@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { setGenreOptions } from '../../Redux/actions';
 import axios from 'axios';
-import styles from './FormPage.module.css'; // Importa los estilos
+import styles from './FormPage.module.css'; 
+import { Link } from 'react-router-dom';
 
 function FormPage(props) {
   const [formData, setFormData] = useState({
@@ -36,22 +36,22 @@ function FormPage(props) {
   }
 
   const isValidURL = (url) => {
-    return true; // Implementa tu lógica de validación de URL
+    return true; 
   }
 
   const isValidDate = (date) => {
-    return true; // Implementa tu lógica de validación de fecha
+    return true; 
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (typeof formData.name !== 'string') {
-      alert('El nombre debe ser una cadena de texto.');
+    if (typeof formData.name !== 'string' && formData.name) {
+      alert('El nombre debe ser una cadena de texto y debe estar declarado.');
       return;
     }
 
-    if (typeof formData.description !== 'string') {
+    if (typeof formData.description !== 'string' && formData.length > 20) {
       alert('La descripción debe ser una cadena de texto.');
       return;
     }
@@ -66,13 +66,13 @@ function FormPage(props) {
       return;
     }
 
-    if (!isValidDate(formData.releaseDate)) {
+    if (!isValidDate(formData.releaseDate) && formData) {
       alert('La fecha de lanzamiento debe ser una fecha válida (AAAA-MM-DD).');
       return;
     }
 
-    if (isNaN(formData.rating) || formData.rating <= 0) {
-      alert('La calificación debe ser un número válido y mayor que cero.');
+    if (isNaN(formData.rating) || formData.rating <= 0 || formData.rating > 5) {
+      alert('Hay campos obligatorios por completar');
       return;
     }
 
@@ -81,12 +81,8 @@ function FormPage(props) {
       .then((response) => {
         console.log('Videojuego creado:', response.data);
         setSuccessMessage('El juego se creó exitosamente.');
-
-        // Mostrar una ventana emergente con el mensaje de éxito
         window.alert('El juego se creó exitosamente.');
-
-        // Redirigir al usuario al "home" u otra página después de aceptar el mensaje
-        window.location.href = 'http://localhost:3000/home/'; // Reemplaza '/' con la URL de tu página principal
+        window.location.href = 'http://localhost:3000/home/'; 
       })
       .catch((error) => {
         console.error('Error al crear el videojuego:', error);
@@ -99,7 +95,7 @@ function FormPage(props) {
       {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
       <form onSubmit={handleSubmit} className={styles['form-card']}>
         <div className={styles['form-group']}>
-          <label className={styles.cardText}>Nombre:</label>
+          <label className={styles.cardText}>Nombre *:</label>
           <input
             type="text"
             name="name"
@@ -109,17 +105,17 @@ function FormPage(props) {
         </div>
 
         <div className={styles['form-group']}>
-          <label className={styles.cardText}>Descripción:</label>
+          <label className={styles.cardText}>Descripción *:</label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleInputChange}
-            className={styles['entry-field-description']} // Agrega esta línea
+            className={styles['entry-field-description']} 
           />
         </div>
 
         <div className={styles['form-group']}>
-          <label className={styles.cardText}>Plataforma:</label>
+          <label className={styles.cardText}>Plataforma *:</label>
           <input
             type="text"
             name="platform"
@@ -164,7 +160,7 @@ function FormPage(props) {
             value=""
             onChange={(e) => handleGenreChange(e.target.value)}
           >
-            <option value="" disabled hidden>Seleccione un género</option>
+            <option value="" disabled hidden>Seleccione un género:</option>
             {genreOptions.map((genre) => (
               <option key={genre} value={genre}>
                 {genre}
@@ -187,10 +183,15 @@ function FormPage(props) {
         </div>
 
         <div className={styles['form-group']}>
-          <button type="submit" className={styles['card-button']}>
-            Crear Videojuego
-          </button>
+            <button type="submit" className={styles['card-button']}>
+                 Crear Videojuego
+            </button>
+        <div className={styles.navigation}>
+             <Link to="/home/" className={`${styles.homeLink} ${styles.buttonEntryStyle}`}>
+                   Volver al Home
+            </Link>
         </div>
+      </div>
       </form>
     </div>
   );
