@@ -133,3 +133,9 @@
   font-size: 85px;
   border: 6px solid black;
 }
+
+.imageLoading {
+  width: 15%; /* Reduce el ancho al 50% */
+  height: 15%; /* Reduce la altura al 50% */
+  opacity: 0.8;
+}

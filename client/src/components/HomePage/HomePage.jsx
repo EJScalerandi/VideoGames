@@ -16,6 +16,9 @@ import { Link } from 'react-router-dom';
 import SearchBar from '../SearchBar/SearchBar';
 import styles from './HomePage.module.css';
 
+import image1 from '../../Carga1.jpg'; 
+import image2 from '../../Carga2.jpg';
+
 function HomePage(props) {
   const {
     allGames,
@@ -117,6 +120,18 @@ function HomePage(props) {
     return filteredGamesWithSearch.slice(indexOfFirstGame, indexOfLastGame);
   };
 
+  // Agregar funcionalidad de alternar imágenes
+  const [currentImage, setCurrentImage] = useState(0);
+  const images = [image1, image2];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((currentImage + 1) % images.length);
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [currentImage]);
+
   return (
     <div className={styles.homePage}>
       <h1 className={styles.gameConsultTitle}>GamesConsult</h1>
@@ -190,6 +205,7 @@ function HomePage(props) {
         <h2 className={styles.pageTitle}>Lista de Juegos</h2>
         {Array.isArray(filteredGamesWithSearch) && filteredGamesWithSearch.length > 0 ? (
           <>
+          
             <Cards allGames={allGames} currentPageGames={getPageGames()} searchedGame={searchGame} />
             <ul className={styles.pagination}>
               {Array.from({ length: totalPages }).map((_, index) => (
@@ -210,8 +226,9 @@ function HomePage(props) {
             </ul>
           </>
         ) : (
-          <p>Por favor aguarde mientras se cargan los juegos</p>
+        <img src={images[currentImage]} alt="Carga" className={styles.imageLoading} />
         )}
+        <h2>Espera a que cargue........., o te las veras con nosotros</h2>
       </div>
     </div>
   );
