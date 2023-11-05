@@ -30,19 +30,19 @@ function HomePage(props) {
     sortOrder,
     sortGamesByName,
     sortGamesByRating,
-  } = props;
-  
+    } = props;
+
   const isAPIGame = (game) => typeof game.id === 'number';
   const isDatabaseGame = (game) => typeof game.id === 'string';
-  
+
+  console.log(allGames)
   
   const filteredGames = allGames.filter((game) => {
     const genreMatch =
     !selectedGenre ||
     (game.genres &&
-      game.genres.some((genre) => genre.name === selectedGenre)) ||
-      (game.genders &&
-        game.genders.some((gender) => gender.name === selectedGenre));
+      game.genres.some((genre) => genre.name === selectedGenre)) 
+
         
      const originMatch =
         !selectedOrigin ||

@@ -36,20 +36,31 @@ export const setSearchedGame = (searchedGame) => {
 
   
 export const setAllVideogames = (dispatch) => {
-const UrlAllVideogames = "http://localhost:3001/videogames/";
+  const UrlAllVideogames = "http://localhost:3001/videogames/";
+
   return async (dispatch) => {
-  try {
-    const { data } = await axios.get(UrlAllVideogames);
-    dispatch({
-      type: SET_ALL_GAMES,
-      payload: data,
-    });
-    return data; 
-  } catch (error) {
-    console.error('Error al obtener los videojuegos:', error);
-    throw error; 
+    try {
+      const { data } = await axios.get(UrlAllVideogames);
+
+      // Modifica la propiedad "genders" a "genres" en cada objeto del array
+      const modifiedData = data.map((game) => {
+        if (game.genders) {
+          game.genres = game.genders;
+          delete game.genders;
+        }
+        return game;
+      });
+
+      dispatch({
+        type: SET_ALL_GAMES,
+        payload: modifiedData,
+      });
+      return modifiedData;
+    } catch (error) {
+      console.error('Error al obtener los videojuegos:', error);
+      throw error;
+    }
   };
-};
 };
 export const setAllGames = (allGames) => ({
   type: SET_ALL_GAMES,
