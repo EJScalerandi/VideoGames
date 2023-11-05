@@ -8,6 +8,7 @@ export const SET_SELECTED_ORIGIN = 'SET_SELECTED_ORIGIN';
 export const SET_GENRE_OPTIONS = 'SET_GENRE_OPTIONS';
 export const SORT_GAMES_BY_NAME = 'SORT_GAMES_BY_NAME';
 export const SORT_GAMES_BY_RATING = 'SORT_GAMES_BY_RATING';
+export const SET_ALL_GAMES_INIT = 'SET_ALL_GAMES_INIT';
 
 export const setSearchedGame = (searchedGame) => {
   if (searchedGame === '') {
@@ -22,11 +23,18 @@ export const setSearchedGame = (searchedGame) => {
     try {
       const { data } = await axios.get(endpoint);
   
-      dispatch({
-        type: SET_SEARCHED_GAME,
-        payload: data,
+      const modifiedData = data.map((game) => {
+        if (game.genders) {
+          game.genres = game.genders;
+          delete game.genders;
+        }
+        return game;
       });
-      return data; 
+
+      dispatch({
+        type: SET_ALL_GAMES,
+        payload: modifiedData,
+      });
     } catch (error) {
       console.error('Error al buscar el juego:', error);
       throw error; 
@@ -53,6 +61,11 @@ export const setAllVideogames = (dispatch) => {
 
       dispatch({
         type: SET_ALL_GAMES,
+        payload: modifiedData,
+      });
+
+      dispatch({
+        type: SET_ALL_GAMES_INIT,
         payload: modifiedData,
       });
       return modifiedData;
@@ -108,4 +121,9 @@ export const sortGamesByRating = (order) => {
     type: SORT_GAMES_BY_RATING,
     payload: order,
   };
+};
+export const setAllGamesInit = (data) => {
+  return{type: SET_ALL_GAMES_INIT,
+  payload: data,
+  }
 };

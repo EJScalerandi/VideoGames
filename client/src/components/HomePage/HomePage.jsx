@@ -20,6 +20,7 @@ sortGamesByRating,
 function HomePage(props) {
   const {
     allGames,
+    allGamesInit,
     selectedGenre,
     selectedOrigin,
     genreOptions,
@@ -35,7 +36,8 @@ function HomePage(props) {
   const isAPIGame = (game) => typeof game.id === 'number';
   const isDatabaseGame = (game) => typeof game.id === 'string';
 
-  console.log(allGames)
+  console.log('allGames:', allGames); // Imprimir allGames en la consola
+
   
   const filteredGames = allGames.filter((game) => {
     const genreMatch =
@@ -63,38 +65,27 @@ function HomePage(props) {
         );
       }
       
-      useEffect(() => {
-        if (searchedGame && searchedGame.length > 0){
-        let data = searchedGame;
-        if (sortOrder === 'asc') {
-          data = data.sort((a, b) => a.name.localeCompare(b.name));
-        } else if (sortOrder === 'desc') {
-          data = data.sort((a, b) => b.name.localeCompare(a.name));
-        } else if (sortOrder === 'ratingAsc') {
-          data = data.sort((a, b) => a.rating - b.rating);
-        } else if (sortOrder === 'ratingDesc') {
-          data = data.sort((a, b) => b.rating - a.rating);
-          setSearchedGame(data)
-        }}
-        else{
+      useEffect(() => {        
           let data = allGames;
-        if (sortOrder === 'asc') {
-          data = data.sort((a, b) => a.name.localeCompare(b.name));
-        } else if (sortOrder === 'desc') {
-          data = data.sort((a, b) => b.name.localeCompare(a.name));
-        } else if (sortOrder === 'ratingAsc') {
-          data = data.sort((a, b) => a.rating - b.rating);
-        } else if (sortOrder === 'ratingDesc') {
-          data = data.sort((a, b) => b.rating - a.rating);
-        }
-        setAllGames(data)};
-      }, [setAllGames, sortOrder, setSearchedGame]);
+          if (sortOrder === 'asc') {
+            data = data.sort((a, b) => a.name.localeCompare(b.name));
+          } else if (sortOrder === 'desc') {
+            data = data.sort((a, b) => b.name.localeCompare(a.name));
+          } else if (sortOrder === 'ratingAsc') {
+            data = data.sort((a, b) => a.rating - b.rating);
+          } else if (sortOrder === 'ratingDesc') {
+            data = data.sort((a, b) => b.rating - a.rating);
+          }
+          setAllGames(data);
+      }, [sortOrder, setAllGames]);
+      
       
       
       const handleResetFilters = () => {
       setSearchedGame([]);
       setSelectedGenre('');
-      setSelectedOrigin('')};
+      setSelectedOrigin('')
+    };
       
       const [currentPage, setCurrentPage] = useState(1);
       const gamesPerPage = 15;
@@ -230,6 +221,7 @@ function HomePage(props) {
 }
 
 const mapStateToProps = (state) => ({
+  allGamesInit: state.allGamesInit,
   allGames: state.allGames,
   selectedGenre: state.selectedGenre,
   selectedOrigin: state.selectedOrigin,

@@ -5,27 +5,24 @@ import HomePage from './components/HomePage/HomePage';
 import FormPage from './components/FormPage/FormPage';
 import Detail from './components/Detail/Detail';
 import LandingPage from './components/LandingPage/LandingPage';
-import { setGenreOptions, setAllVideogames } from './Redux/actions'; 
-import { connect } from 'react-redux'; 
+import { setGenreOptions, setAllVideogames, setAllGamesInit, setAllGames } from './Redux/actions';
+import { connect } from 'react-redux';
 
-
-
-function App(props) { // en esta parte mando dispatch a action para que los estados de generos y videogames hagan la peticion
+function App(props) {
   useEffect(() => {
-    props.setGenreOptions();
-  }, [props.setGenreOptions]);
-  useEffect(() => {
+    // Cargar videojuegos y almacenar en allGamesInit y allGames
     props.setAllVideogames();
-  }, [props.setAllVideogames]);
-
+    props.setGenreOptions();
+  }, [props.setGenreOptions, props.setAllVideogames]);
+  
   return (
-    <div className= "appBackground">
-    <Routes>
-      <Route path="/home" element={<HomePage />} />
-      <Route path="/FormPage" element={<FormPage />} />
-      <Route exact path="/" element={<LandingPage />} />
-      <Route path="/game/:id" element={<Detail />} />
-    </Routes>
+    <div className="appBackground">
+      <Routes>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/FormPage" element={<FormPage />} />
+        <Route exact path="/" element={<LandingPage />} />
+        <Route path="/game/:id" element={<Detail />} />
+      </Routes>
     </div>
   );
 }
@@ -33,6 +30,8 @@ function App(props) { // en esta parte mando dispatch a action para que los esta
 const mapDispatchToProps = {
   setGenreOptions,
   setAllVideogames,
+  setAllGamesInit,
+  setAllGames,
 };
 
 export default connect(null, mapDispatchToProps)(App);

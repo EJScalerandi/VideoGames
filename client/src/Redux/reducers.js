@@ -7,16 +7,18 @@ import {
   SET_GENRE_OPTIONS,
   SORT_GAMES_BY_NAME,
   SORT_GAMES_BY_RATING,
+  SET_ALL_GAMES_INIT, // Agrega esta importación
 } from './actions';
 
 const initialState = {
+  allGamesInit: [], // Nuevo estado para guardar la copia inicial de allGames
   searchedGame: [],
   gameNotFound: false,
   allGames: [],
   selectedGenre: '',
   selectedOrigin: 'Todos',
   genreOptions: [],
-  sortOrder: '', 
+  sortOrder: '',
 };
 
 const reducers = (state = initialState, action) => {
@@ -55,6 +57,11 @@ const reducers = (state = initialState, action) => {
       return {
         ...state,
         sortOrder: action.payload,
+      };
+    case SET_ALL_GAMES_INIT: // Nuevo case para SET_ALL_GAMES_INIT
+      return {
+        ...state,
+        allGamesInit: action.payload,
       };
     default:
       return state;
