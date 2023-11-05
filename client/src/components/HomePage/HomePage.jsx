@@ -37,7 +37,7 @@ function HomePage(props) {
   const isDatabaseGame = (game) => typeof game.id === 'string';
 
   console.log('allGames:', allGames); // Imprimir allGames en la consola
-
+console.log("allGamesInit:", allGamesInit);
   
   const filteredGames = allGames.filter((game) => {
     const genreMatch =
@@ -77,14 +77,15 @@ function HomePage(props) {
             data = data.sort((a, b) => b.rating - a.rating);
           }
           setAllGames(data);
-      }, [sortOrder, setAllGames]);
+      }, [sortOrder, setAllGames, allGames, allGamesInit]);
       
       
       
       const handleResetFilters = () => {
+      setAllGames(allGamesInit);
       setSearchedGame([]);
       setSelectedGenre('');
-      setSelectedOrigin('')
+      setSelectedOrigin('Todos');
     };
       
       const [currentPage, setCurrentPage] = useState(1);
