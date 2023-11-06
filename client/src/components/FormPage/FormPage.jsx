@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import styles from './FormPage.module.css'; 
+import styles from './FormPage.module.css';
 import { Link } from 'react-router-dom';
+import { setAddGame, setAllGames } from '../../Redux/actions';
 
 function FormPage(props) {
   const [formData, setFormData] = useState({
@@ -15,9 +16,11 @@ function FormPage(props) {
     Genders: [],
   });
 
-  const { genreOptions } = props;
+  const { genreOptions, setAllGamesInit, allGamesInit, setAllGames } = props;
 
   const [successMessage, setSuccessMessage] = useState('');
+
+  const homeLinkRef = useRef(null); // Declaración de la referencia
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,11 +39,11 @@ function FormPage(props) {
   }
 
   const isValidURL = (url) => {
-    return true; 
+    return true;
   }
 
   const isValidDate = (date) => {
-    return true; 
+    return true;
   }
 
   const handleSubmit = (e) => {
@@ -75,14 +78,21 @@ function FormPage(props) {
       alert('Hay campos obligatorios por completar');
       return;
     }
-
+    console.log(allGamesInit);
     axios
       .post('http://localhost:3001/videogames/', formData)
       .then((response) => {
+        response.data.Genres = response.data.Genders;
+        delete response.data.Genders;
         console.log('Videojuego creado:', response.data);
-        setSuccessMessage('El juego se creó exitosamente.');
-        window.alert('El juego se creó exitosamente.');
-        window.location.href = 'http://localhost:3000/home/'; 
+        setSuccessMessage('El juego se creó exitosamente');
+        const updateAllGames = [response.data, ...allGamesInit ];
+        setAllGames(updateAllGames);
+        // Muestra el alert
+        window.alert('El juego se creó exitosamente');
+     
+        // Activa el botón/link de "Volver al Home" usando la referencia
+        homeLinkRef.current.click();
       })
       .catch((error) => {
         console.error('Error al crear el videojuego:', error);
@@ -110,7 +120,7 @@ function FormPage(props) {
             name="description"
             value={formData.description}
             onChange={handleInputChange}
-            className={styles['entry-field-description']} 
+            className={styles['entry-field-description']}
           />
         </div>
 
@@ -183,15 +193,20 @@ function FormPage(props) {
         </div>
 
         <div className={styles['form-group']}>
-            <button type="submit" className={styles['card-button']}>
-                 Crear Videojuego
-            </button>
-        <div className={styles.navigation}>
-             <Link to="/home/" className={`${styles.homeLink} ${styles.buttonEntryStyle}`}>
-                   Volver al Home
+          <button type="submit" className={styles['card-button']}>
+            Crear Videojuego
+          </button>
+          <div className={styles.navigation}>
+            <Link
+              to="/home/"
+              className={`${styles.homeLink} ${styles.buttonEntryStyle}`}
+              ref={homeLinkRef} // Agrega la referencia
+              id="homeLink" // Agrega un id para que funcione como un enlace
+            >
+              Volver al Home
             </Link>
+          </div>
         </div>
-      </div>
       </form>
     </div>
   );
@@ -199,7 +214,12 @@ function FormPage(props) {
 
 const mapStateToProps = (state) => ({
   genreOptions: state.genreOptions,
+  allGamesInit: state.allGamesInit,
+  allGames: state.allGames
+});
+const mapDispatchToProps = (dispatch) => ({
+  setAddGame: (game) => dispatch(setAddGame(game)),
+  setAllGames: (games) => dispatch(setAllGames(games)), // Asegúrate de que esta línea esté presente
 });
 
-export default connect(mapStateToProps)(FormPage);
-
+export default connect(mapStateToProps, mapDispatchToProps)(FormPage);

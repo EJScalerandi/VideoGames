@@ -36,8 +36,6 @@ function HomePage(props) {
   const isAPIGame = (game) => typeof game.id === 'number';
   const isDatabaseGame = (game) => typeof game.id === 'string';
 
-  console.log('allGames:', allGames); // Imprimir allGames en la consola
-console.log("allGamesInit:", allGamesInit);
   
   const filteredGames = allGames.filter((game) => {
     const genreMatch =

@@ -4,24 +4,15 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import styles from './Cards.module.css';
 
-function Cards({ currentPageGames }) {
-  const searchedGame = useSelector((state) => state.searchedGame);
-  const isSearching = searchedGame.length > 1;
-
+function Cards({ allGames }) {
   return (
     <div className={styles.cardsContainer}>
-      {isSearching ? (
-        searchedGame.map((game, index) => (
-          <div key={`searched-game-${index}`} className={styles.searchedGameCard}>
-            <Card game={game} />
-          </div>
-        ))
-      ) : currentPageGames.map((game) => (
+      {allGames.map((game) => (
         <Link to={`/game/${game.id}`} key={game.id} className={styles.cardLink}>
           <Card game={game} /> 
         </Link>
       ))}
-      {!isSearching && currentPageGames.length === 0 && (
+      {allGames.length === 0 && (
         <p>No existen juegos que se ajusten a la búsqueda</p>
       )}
     </div>
@@ -29,3 +20,4 @@ function Cards({ currentPageGames }) {
 }
 
 export default Cards;
+

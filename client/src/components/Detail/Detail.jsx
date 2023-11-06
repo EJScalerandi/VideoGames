@@ -61,15 +61,9 @@ function Detail() {
         />
       </div>
       <div className={styles.additionalInfo}>
-        {isDataFromAPI ? (
-          <p className={styles.genres}>
-            Género: {gameDetails.genres && gameDetails.genres.map((genre) => genre.name).join(', ')}
-          </p>
-        ) : (
-          <p className={styles.genres}>
-            Género: {gameDetails.genders && gameDetails.genders.map((gender) => gender.name).join(', ')}
-          </p>
-        )}
+        <p className={styles.genres}>
+          Género: {gameDetails.genres && gameDetails.genres.map((genre) => genre.name).join(', ')}
+        </p>
         <p className={styles.releaseDate}>Fecha de lanzamiento: {gameDetails.releaseDate.substring(0, 10)}</p>
         <p className={styles.rating}>Rating: {gameDetails.rating}</p>
       </div>
@@ -78,3 +72,4 @@ function Detail() {
 }
 
 export default Detail;
+

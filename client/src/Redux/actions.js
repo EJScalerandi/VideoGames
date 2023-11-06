@@ -9,6 +9,7 @@ export const SET_GENRE_OPTIONS = 'SET_GENRE_OPTIONS';
 export const SORT_GAMES_BY_NAME = 'SORT_GAMES_BY_NAME';
 export const SORT_GAMES_BY_RATING = 'SORT_GAMES_BY_RATING';
 export const SET_ALL_GAMES_INIT = 'SET_ALL_GAMES_INIT';
+export const SET_ADD_GAME = "SET_ADD_GAME";
 
 export const setSearchedGame = (searchedGame) => {
   if (searchedGame === '') {
@@ -124,6 +125,13 @@ export const sortGamesByRating = (order) => {
 };
 export const setAllGamesInit = (data) => {
   return{type: SET_ALL_GAMES_INIT,
+  payload: data,
+  }
+};
+
+export const setAddGame = (data) => {
+  return{
+  type: SET_ADD_GAME,
   payload: data,
   }
 };

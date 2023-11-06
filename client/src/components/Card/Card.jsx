@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './Card.module.css';
 
 function Card({ game }) {
-
   const averageRating = Math.round(game.rating);
-
 
   const starsArray = Array(5).fill(0).map((_, index) => (index < averageRating ? 1 : 0));
 
@@ -32,11 +30,10 @@ function Card({ game }) {
         <h3>{game.name}</h3>
       </Link>
       <p>
-        Género: {game.genres ? game.genres.map((genre) => genre.name).join(', ') : game.genders.map((gender) => gender.name).join(', ')}
+        Género: {game.genres ? game.genres.map((genre) => genre.name).join(', ') : 'No hay información de género'}
       </p>
-     </div>
+    </div>
   );
 }
 
 export default Card;
-

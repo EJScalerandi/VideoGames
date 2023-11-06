@@ -63,6 +63,13 @@ const reducers = (state = initialState, action) => {
         ...state,
         allGamesInit: action.payload,
       };
+      case SET_ALL_GAMES:
+        return {
+          ...state,
+          allGamesInit: [action.payload, ...state.allGamesInit],
+          allGames: [action.payload, ...state.allGames]
+        }
+      
     default:
       return state;
   }
