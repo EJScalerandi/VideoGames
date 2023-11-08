@@ -43,7 +43,6 @@ function HomePage(props) {
   setSelectedGenre('');
   setSelectedOrigin('Todos');
   sortGamesByName('');
-  sortGamesByRating('');
   };
   console.log(allGamesInit)
   const filteredGames = allGames.filter((game) => {
@@ -72,8 +71,10 @@ function HomePage(props) {
         );
       }
       
-      useEffect(() => {        
+      useEffect(() => {
+        const handleSortOrderChange = () => {
           let data = allGames;
+    
           if (sortOrder === 'asc') {
             data = data.sort((a, b) => a.name.localeCompare(b.name));
           } else if (sortOrder === 'desc') {
@@ -82,19 +83,23 @@ function HomePage(props) {
             data = data.sort((a, b) => a.rating - b.rating);
           } else if (sortOrder === 'ratingDesc') {
             data = data.sort((a, b) => b.rating - a.rating);
-          } else if (sortOrder === ""){
-              let databaseGames = allGames.filter(isDatabaseGame);
-              let apiGames = allGames.filter(isAPIGame);
-            
-              // Ordena los juegos de la API por ID de manera creciente
-              apiGames.sort((a, b) => a.id - b.id);
-            
-              // Combina los juegos de la Base de Datos y la API
-              data = [...databaseGames, ...apiGames];
-            }
-            setAllGames(data);
-            console.log(sortOrder)
+          } else if (sortOrder === "") {
+            let databaseGames = allGames.filter(isDatabaseGame);
+            let apiGames = allGames.filter(isAPIGame);
+    
+            // Ordena los juegos de la API por ID de manera creciente
+            apiGames.sort((a, b) => a.id - b.id);
+    
+            // Combina los juegos de la Base de Datos y la API
+            data = [...databaseGames, ...apiGames];
+          }
+    
+          setAllGames(data);
+          };
+    
+        handleSortOrderChange();
       }, [sortOrder]);
+   
       
       
       
