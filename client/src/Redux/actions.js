@@ -71,9 +71,8 @@ export const setAllVideogames = (dispatch) => {
       });
       return modifiedData;
     } catch (error) {
-      console.error('Error al obtener los videojuegos:', error);
-      throw error;
-    }
+     alert('Error al obtener los videojuegos');
+     }
   };
 };
 export const setAllGames = (allGames) => ({
