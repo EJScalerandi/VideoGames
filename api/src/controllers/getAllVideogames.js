@@ -8,13 +8,12 @@ const getAllVideogames = async (req, res) => {
     // Obtener videojuegos de la base de datos incluyendo información de género
     const databaseVideogames = await Videogame.findAll({
       include: {
-        model: Gender, 
-        as: 'genders', 
-        attributes: ['name'], 
+        model: Gender,
+        as: 'genders',
+        attributes: ['name'],
         through: 'videogame_activity', // Corrige el nombre de la tabla intermedia
       },
     });
-   
 
     // Obtener videojuegos de la API
     const maxGames = 100;
@@ -22,11 +21,10 @@ const getAllVideogames = async (req, res) => {
     let allVideogames = [...databaseVideogames];
     let page = 1;
     let gamesObtained = databaseVideogames.length;
-  
+
     while (gamesObtained < maxGames) {
       const response = await axios.get(apiUrl + `&page=${page}`);
       const gamesOnPage = response.data.results;
-  
 
       if (gamesOnPage.length === 0) {
         break;
@@ -39,6 +37,10 @@ const getAllVideogames = async (req, res) => {
 
       page++;
     }
+
+    allVideogames = allVideogames.filter(game => typeof game.id === 'number');
+    
+    allVideogames.sort((a, b) => a.id - b.id);
 
     res.status(200).json(allVideogames);
   } catch (error) {

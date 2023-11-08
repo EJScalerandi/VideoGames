@@ -93,7 +93,7 @@ function HomePage(props) {
               data = [...databaseGames, ...apiGames];
             }
             setAllGames(data);
-            
+            console.log(sortOrder)
       }, [sortOrder]);
       
       
