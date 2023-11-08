@@ -21,7 +21,6 @@ function Detail() {
         const data = response.data;
         response.data.genres = response.data.genders;
         delete response.data.genders;
-        console.log(data)
         setGameDetails(data);
         setIsDataFromAPI(data.genres && data.genres.length > 0);
       })

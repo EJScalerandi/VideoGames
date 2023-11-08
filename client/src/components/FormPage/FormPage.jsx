@@ -20,7 +20,7 @@ function FormPage(props) {
 
   const [successMessage, setSuccessMessage] = useState('');
 
-  const homeLinkRef = useRef(null); // Declaración de la referencia
+  const homeLinkRef = useRef(null); 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -39,46 +39,54 @@ function FormPage(props) {
   }
 
   const isValidURL = (url) => {
-    return true;
+  
+    const urlPattern = /^(https?:\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$/;
+    return urlPattern.test(url);
   }
-
+  
   const isValidDate = (date) => {
-    return true;
+
+    const datePattern = /^\d{4}\/\d{2}\/\d{2}$/;
+    return datePattern.test(date);
   }
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (typeof formData.name !== 'string' && formData.name) {
-      alert('El nombre debe ser una cadena de texto y debe estar declarado.');
+  
+    if (!formData.name) {
+      alert('El campo Nombre es obligatorio.');
       return;
     }
-
-    if (typeof formData.description !== 'string' && formData.length > 20) {
-      alert('La descripción debe ser una cadena de texto.');
+  
+    if (formData.description.length < 20) {
+      alert('La descripción debe ser una cadena de texto de al menos 20 caracteres.');
       return;
     }
-
-    if (typeof formData.platform !== 'string') {
-      alert('La plataforma debe ser una cadena de texto.');
+    if (formData.platform.length === 0) {
+      alert('Debe agregar una plataforma al menos.');
       return;
     }
-
     if (!isValidURL(formData.image)) {
       alert('La imagen debe ser una URL válida.');
       return;
     }
-
-    if (!isValidDate(formData.releaseDate) && formData) {
+    
+    if (!isValidDate(formData.releaseDate)) {
       alert('La fecha de lanzamiento debe ser una fecha válida (AAAA-MM-DD).');
       return;
     }
-
+  
     if (isNaN(formData.rating) || formData.rating <= 0 || formData.rating > 5) {
-      alert('Hay campos obligatorios por completar');
+      alert('La calificación debe ser un número entre 0 y 5.');
       return;
     }
-    console.log(allGamesInit);
+  
+    if (formData.Genders.length === 0) {
+      alert('Debe seleccionar al menos un género.');
+      return;
+    }
+
     axios
       .post('http://localhost:3001/videogames/', formData)
       .then((response) => {
