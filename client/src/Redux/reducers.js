@@ -1,6 +1,5 @@
 import {
   SET_SEARCHED_GAME,
-  SET_GAME_NOT_FOUND,
   SET_ALL_GAMES,
   SET_SELECTED_GENRE,
   SET_SELECTED_ORIGIN,
@@ -66,8 +65,7 @@ const reducers = (state = initialState, action) => {
       case SET_ALL_GAMES:
         return {
           ...state,
-          allGamesInit: [action.payload, ...state.allGamesInit],
-          allGames: [action.payload, ...state.allGames]
+          allGames: action.payload,
         }
       
     default:

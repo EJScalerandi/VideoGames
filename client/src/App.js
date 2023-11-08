@@ -5,7 +5,7 @@ import HomePage from './components/HomePage/HomePage';
 import FormPage from './components/FormPage/FormPage';
 import Detail from './components/Detail/Detail';
 import LandingPage from './components/LandingPage/LandingPage';
-import { setGenreOptions, setAllVideogames, setAllGamesInit, setAllGames } from './Redux/actions';
+import { setGenreOptions, setAllVideogames,  } from './Redux/actions';
 import { connect } from 'react-redux';
 
 function App(props) {
@@ -30,8 +30,6 @@ function App(props) {
 const mapDispatchToProps = {
   setGenreOptions,
   setAllVideogames,
-  setAllGamesInit,
-  setAllGames,
 };
 
 export default connect(null, mapDispatchToProps)(App);

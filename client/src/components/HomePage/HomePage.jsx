@@ -4,12 +4,12 @@ import Cards from '../Cards/Cards';
 import { Link } from 'react-router-dom';
 import SearchBar from '../SearchBar/SearchBar';
 import styles from './HomePage.module.css';
-import image1 from '../../assets/Carga1.jpg'; 
+import image1 from '../../assets/Carga1.jpg';
 import image2 from '../../assets/Carga2.jpg'; 
 import image3 from '../../assets/Carga3.jpg'; 
 import {
-setSearchedGame,
-setAllGames,
+  setSearchedGame,
+  setAllGames,
 setSelectedGenre,
 setSelectedOrigin,
 setGenreOptions,
@@ -32,19 +32,28 @@ function HomePage(props) {
     sortGamesByName,
     sortGamesByRating,
     } = props;
-
+  
+ 
   const isAPIGame = (game) => typeof game.id === 'number';
   const isDatabaseGame = (game) => typeof game.id === 'string';
 
   
+  const handleResetFilters = () => {
+  setSearchedGame([]);
+  setSelectedGenre('');
+  setSelectedOrigin('Todos');
+  sortGamesByName('');
+  sortGamesByRating('');
+  };
+  console.log(allGamesInit)
   const filteredGames = allGames.filter((game) => {
     const genreMatch =
     !selectedGenre ||
     (game.genres &&
       game.genres.some((genre) => genre.name === selectedGenre)) 
-
-        
-     const originMatch =
+      
+      
+      const originMatch =
         !selectedOrigin ||
         selectedOrigin === 'Todos' ||
         (selectedOrigin === 'API' && isAPIGame(game)) ||
@@ -73,18 +82,22 @@ function HomePage(props) {
             data = data.sort((a, b) => a.rating - b.rating);
           } else if (sortOrder === 'ratingDesc') {
             data = data.sort((a, b) => b.rating - a.rating);
-          }
-          setAllGames(data);
-      }, [sortOrder, setAllGames, allGames, allGamesInit]);
+          } else if (sortOrder === ""){
+              let databaseGames = allGames.filter(isDatabaseGame);
+              let apiGames = allGames.filter(isAPIGame);
+            
+              // Ordena los juegos de la API por ID de manera creciente
+              apiGames.sort((a, b) => a.id - b.id);
+            
+              // Combina los juegos de la Base de Datos y la API
+              data = [...databaseGames, ...apiGames];
+            }
+            setAllGames(data);
+            
+      }, [sortOrder]);
       
       
       
-      const handleResetFilters = () => {
-      setAllGames(allGamesInit);
-      setSearchedGame([]);
-      setSelectedGenre('');
-      setSelectedOrigin('Todos');
-    };
       
       const [currentPage, setCurrentPage] = useState(1);
       const gamesPerPage = 15;
@@ -107,13 +120,13 @@ function HomePage(props) {
   const [currentImage, setCurrentImage] = useState(0);
   const images = [image1, image2, image3];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((currentImage + 1) % images.length);
-    }, 500);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentImage((currentImage + 1) % images.length);
+  //   }, 500);
 
-    return () => clearInterval(interval);
-  }, [currentImage]);
+  //   return () => clearInterval(interval);
+  // }, [currentImage]);
 
   return (
     <div className={styles.homePage}>

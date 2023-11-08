@@ -123,11 +123,7 @@ export const sortGamesByRating = (order) => {
     payload: order,
   };
 };
-export const setAllGamesInit = (data) => {
-  return{type: SET_ALL_GAMES_INIT,
-  payload: data,
-  }
-};
+
 
 export const setAddGame = (data) => {
   return{

@@ -82,17 +82,18 @@ function FormPage(props) {
     axios
       .post('http://localhost:3001/videogames/', formData)
       .then((response) => {
-        response.data.Genres = response.data.Genders;
-        delete response.data.Genders;
-        console.log('Videojuego creado:', response.data);
-        setSuccessMessage('El juego se creó exitosamente');
-        const updateAllGames = [response.data, ...allGamesInit ];
-        setAllGames(updateAllGames);
-        // Muestra el alert
-        window.alert('El juego se creó exitosamente');
-     
-        // Activa el botón/link de "Volver al Home" usando la referencia
-        homeLinkRef.current.click();
+        response.data.genres = response.data.genders;
+    delete response.data.genders;
+
+    console.log('Videojuego creado:', response.data);
+    setSuccessMessage('El juego se creó exitosamente');
+
+    const updateAllGames = [response.data, ...allGamesInit];
+    setAllGames(updateAllGames);
+
+    window.alert('El juego se creó exitosamente');
+
+    homeLinkRef.current.click();
       })
       .catch((error) => {
         console.error('Error al crear el videojuego:', error);
